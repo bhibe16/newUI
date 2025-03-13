@@ -14,7 +14,7 @@ class UserSyncController extends Controller
     {
         try {
             // Fetch data from API
-            $response = Http::get('https://admin.gwamerchandise.com/api/users');
+            $response = Http::withoutVerifying()->get('https://admin.gwamerchandise.com/api/users');
 
             if ($response->successful()) {
                 $users = $response->json()['users'] ?? []; // Ensure 'users' key exists

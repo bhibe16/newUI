@@ -159,7 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Barryvdh\DomPDF\ServiceProvider::class, // Add this line
         /*
          * Application Service Providers...
          */
@@ -169,6 +169,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
     ])->toArray(),
+    'aliases' => Facade::defaultAliases()->merge([
+    'PDF' => Barryvdh\DomPDF\Facade::class, // Add this line
+])->toArray(),
 
     /*
     |--------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\ProfileController;
@@ -13,6 +14,10 @@ use App\Http\Controllers\Employee\EducationalHistoryController;
 use App\Http\Controllers\API\EmployeeAPIController;
 use App\Http\Controllers\Employee\DocumentController as EmployeeDocumentController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
+use App\Http\Controllers\Api\PayslipController;
+use App\Http\Controllers\Api\JobPostController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +25,33 @@ use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 |--------------------------------------------------------------------------
 */
 
+// Default Route Redirect for Logged-in Users
 Route::get('/', function () {
-    return view('login');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    if (Auth::check()) {
+        return redirect()->route(Auth::user()->role === 'Employee' ? 'employee.dashboard' : 'admin.dashboard');
+    }
+    return redirect()->route('login'); // If not logged in, go to login
+});
+
+// Authentication Routes
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+});
+
+// Protect Dashboard Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+    Route::get('/employee/dashboard', function () {
+        return view('employee.dashboard');
+    })->name('employee.dashboard');
+});
+
+// Logout
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 // Profile Routes
 Route::middleware('auth')->group(function () {
@@ -44,13 +73,13 @@ Route::middleware(['auth', 'admin', 'employee.status'])->group(function () {
     });
 });
 
-use App\Http\Controllers\Api\JobPostController;
 
 Route::get('/admin/jobposts', [JobPostController::class, 'index'])->name('jobposts.index');
 
-use App\Http\Controllers\Api\PayslipController;
 
 Route::get('/admin/payslips', [PayslipController::class, 'index'])->name('payslips.index');
+Route::get('/payslips/bonuses', [PayslipController::class, 'bonuses'])->name('payslips.bonuses');
+
 
 
 
@@ -162,5 +191,7 @@ Route::patch('/employees/{employee}/update-status', [EmployeeController::class, 
    
     
         Route::get('/notifications', [NotificationController::class, 'showNotifications'])->name('notifications');
+
+        Route::get('/download-payslip', [PayslipController::class, 'downloadPayslip'])->name('download.payslip');
 
 require __DIR__.'/auth.php';

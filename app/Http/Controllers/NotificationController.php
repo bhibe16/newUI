@@ -19,7 +19,7 @@ class NotificationController extends Controller
         $employee = Employee::where('user_id', $user->id)->first(); // Get employee details
 
         // Fetch API notifications (termination notifications)
-        $response = Http::get('https://hr1.gwamerchandise.com/api/resigned');
+        $response = Http::withoutVerifying()->get('https://hr1.gwamerchandise.com/api/resigned');
 
         // Check if the request was successful
         $terminationNotifications = $response->successful() ? $response->json() : [];
