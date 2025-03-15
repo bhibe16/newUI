@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="logout-url" content="{{ route('logout') }}">
-    <title>HRIS - Employee Payslips</title>
+    <title>HRIS - Employee Payslips-Bonuses</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -74,21 +74,11 @@
                     '{{ $payslip['bonuses'] }}'
                 )" class="text-blue-500 hover:underline">
                     View
-                </button>
-                |
-                <a href="{{ route('download.payslip', [
-    'employee_id' => $payslip['employee_id'],               
-    'employee_name' => $payslip['employee_name'],
-    'employee_id' => $payslip['contact'],
-    'employee_id' => $payslip['employer'],
-    'employee_id' => $payslip['department'],
-    'pay_period' => $payslip['pay_period'],
-    'payment_date' => $payslip['payment_date'],
-    'bonuses' => $payslip['bonuses']
-]) }}" class="text-green-500 hover:underline">Download</a>
-
-            </td>
-        </tr>
+                    </button>
+                    |
+                    Delete
+                </td>
+            </tr>
         @endforeach
     </tbody>
 </table>
@@ -129,8 +119,10 @@
 
         </table>
 
-        <div class="flex justify-end mt-4">
-            <button onclick="closePayslipModal()" class="bg-red-500 text-white px-4 py-2 rounded">Close</button>
+        <!-- Modal Footer (Buttons at the Bottom) -->
+        <div class="flex justify-between items-center mt-4">
+            <a id="downloadPayslip" href="#" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Download PDF</a>
+            <button onclick="closePayslipModal()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Close</button>
         </div>
     </div>
 </div>

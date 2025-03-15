@@ -37,7 +37,7 @@
             <!-- Statistics Section -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Each stat card with hover animation -->
-                <a href="https://hr3.gwamerchandise.com/admin/employees/index" target="_blank">
+                <a href="https://hr3.gwamerchandise.com/admin/employees" target="_blank">
     <div id="totalEmployeesBox" class="bg-yellow-200 p-6 rounded-lg shadow text-center transition-transform duration-300 hover:scale-105 hover:shadow-lg group cursor-pointer">
         <div class="inline-block p-3 bg-yellow-300 rounded-full transition-colors duration-300 group-hover:bg-yellow-400">
             <heroicon-outline-user-group class="w-8 h-8 text-gray-800" />

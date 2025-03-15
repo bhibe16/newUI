@@ -11,7 +11,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Employee\EducationalHistoryController;
-use App\Http\Controllers\API\EmployeeAPIController;
+use App\Http\Controllers\Api\EmployeeAPIController;
 use App\Http\Controllers\Employee\DocumentController as EmployeeDocumentController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Api\PayslipController;
@@ -79,6 +79,7 @@ Route::get('/admin/jobposts', [JobPostController::class, 'index'])->name('jobpos
 
 Route::get('/admin/payslips', [PayslipController::class, 'index'])->name('payslips.index');
 Route::get('/payslips/bonuses', [PayslipController::class, 'bonuses'])->name('payslips.bonuses');
+Route::get('/payslips/deduction', [PayslipController::class, 'deduction'])->name('payslips.deduction');
 
 
 

@@ -157,7 +157,7 @@
             <ul id="payroll-submenu" class="submenu space-y-2 pl-8 hidden">
                 <li><a href="{{ route('payslips.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Payslips</a></li>
                 <li><a href="{{ route('payslips.bonuses') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Bonuses</a></li>
-                <li><a href="#" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Deductions</a></li>
+                <li><a href="{{ route('payslips.deduction') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Deductions</a></li>
             </ul>
         </li>
 
