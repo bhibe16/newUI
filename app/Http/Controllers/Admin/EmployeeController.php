@@ -10,43 +10,29 @@ use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $query = request('search');
-        $status = request('status'); // Get status from query string
+        $query = $request->input('search');
+        $status = $request->input('status');
     
-        // Ensure status matches database values (approved, reject, pending)
-        if ($status) {
-            $validStatuses = ['approved', 'reject', 'pending'];
-            if (!in_array($status, $validStatuses)) {
-                $status = null; // Prevent invalid status queries
-            }
+        // Ensure status is valid
+        $validStatuses = ['approved', 'reject', 'pending'];
+        if ($status && !in_array($status, $validStatuses)) {
+            $status = null; 
         }
     
-        // Filter employees based on status and search query
-        $employees = Employee::when($status, function ($q) use ($status) {
-                $q->where('status', $status);
-            })
-            ->when($query, function ($q) use ($query) {
-                $q->where('user_id', 'like', "%$query%")
-                  ->orWhere('first_name', 'like', "%$query%")
-                  ->orWhere('last_name', 'like', "%$query%")
-                  ->orWhere('status', 'like', "%$query%")
-                  ->orWhere('email', 'like', "%$query%")
-                  ->orWhereHas('position', function ($subQuery) use ($query) {
-                      $subQuery->where('name', 'like', "%$query%");
-                  })
-                  ->orWhereHas('department', function ($subQuery) use ($query) {
-                      $subQuery->where('name', 'like', "%$query%");
-                  });
-            })->paginate(8)->withQueryString(); // Keep query when paginating
+        // Search with Meilisearch (AI-powered)
+        $employees = Employee::search($query)->get();
     
-        $employment = EmploymentHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
-        $educational = EducationalHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
+        // Filter results by status if needed
+        if ($status) {
+            $employees = $employees->where('status', $status);
+        }
     
-        // Return Blade view if it's a normal request
-        return view('admin.employees.index', compact('employees', 'employment', 'educational'));
+        return view('admin.employees.index', ['employees' => $employees]);
     }
+
+    
     public function apiIndex()
     {
         $employees = Employee::all();

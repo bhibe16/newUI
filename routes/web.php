@@ -194,5 +194,6 @@ Route::patch('/employees/{employee}/update-status', [EmployeeController::class, 
         Route::get('/notifications', [NotificationController::class, 'showNotifications'])->name('notifications');
 
         Route::get('/download-payslip', [PayslipController::class, 'downloadPayslip'])->name('download.payslip');
+        Route::get('/downloadBonus', [PayslipController::class, 'downloadbonuses'])->name('download.bonus');
 
 require __DIR__.'/auth.php';

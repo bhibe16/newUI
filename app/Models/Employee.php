@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes; // Keep SoftDeletes
+use Laravel\Scout\Searchable;
 
 class Employee extends Model
 {
-    use HasFactory, SoftDeletes; // Use SoftDeletes
+    use HasFactory, SoftDeletes, Searchable; // Use SoftDeletes
 
     protected $fillable = [
         'first_name',
@@ -86,4 +87,37 @@ class Employee extends Model
     {
         return $this->hasMany(EducationalHistory::class, 'user_id', 'user_id');
     }
+
+
+   public function toSearchableArray()
+{
+    $this->load('department', 'position'); // Ensure relationships are loaded
+
+    return [
+        'user_id' => $this->user_id,
+        'first_name' => $this->first_name,
+        'last_name' => $this->last_name,
+        'middle_name' => $this->middle_name,
+        'email' => $this->email,
+        'phone' => $this->phone,
+        'address' => $this->address,
+        'date_of_birth' => $this->date_of_birth,
+        'gender' => $this->gender,
+        'nationality' => $this->nationality,
+        'marital_status' => $this->marital_status,
+        'start_date' => $this->start_date,
+        'end_date' => $this->end_date,
+        'employment_status' => $this->employment_status,
+        'profile_picture' => $this->profile_picture,
+        'status' => $this->status,
+
+        // ✅ Include Department Name instead of department_id
+        'department' => $this->department ? $this->department->name : null,
+
+        // ✅ Include Position Name instead of position_id
+        'position' => $this->position ? $this->position->name : null,
+    ];
+}
+
+    
 }

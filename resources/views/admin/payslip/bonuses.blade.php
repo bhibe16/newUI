@@ -35,118 +35,123 @@
                 </form>
             </div>
 
-              <!-- Table Layout Only -->
-              <div class="overflow-x-auto bg-white">
+            <!-- Table Layout Only -->
+            <div class="overflow-x-auto bg-white">
                 <table class="w-full border-collapse border border-gray-200">
                     <thead class="linear-gradient">
                         <tr>
-            <th class="border px-4 py-2">ID</th>
-            <th class="border px-4 py-2">Employee Name</th>
-            <th class="border px-4 py-2">Contact</th>
-            <th class="border px-4 py-2">Employer</th>
-            <th class="border px-4 py-2">Department</th>
-            <th class="border px-4 py-2">Pay Period</th>
-            <th class="border px-4 py-2">Payment Date</th>
-            <th class="border px-4 py-2">Bonuses</th>
-            <th class="border px-4 py-2">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($payslips as $payslip)
-        <tr>
-            <td class="border px-4 py-2">{{ $payslip['employee_id'] }}</td>
-            <td class="border px-4 py-2">{{ $payslip['employee_name'] }}</td>
-            <td class="border px-4 py-2">{{ $payslip['contact'] }}</td>
-            <td class="border px-4 py-2">{{ $payslip['employer'] }}</td>
-            <td class="border px-4 py-2">{{ $payslip['department'] }}</td>
-            <td class="border px-4 py-2">{{ $payslip['pay_period'] }}</td>
-            <td class="border px-4 py-2">{{ $payslip['payment_date'] }}</td>
-            <td class="border px-4 py-2">{{ $payslip['bonuses'] }}</td>
-            <td class="border px-4 py-2">
-                <button onclick="openPayslipModal(
-                    '{{ $payslip['employee_id'] }}', 
-                    '{{ $payslip['employee_name'] }}', 
-                    '{{ $payslip['contact'] }}', 
-                    '{{ $payslip['employer'] }}', 
-                    '{{ $payslip['department'] }}', 
-                    '{{ $payslip['pay_period'] }}', 
-                    '{{ $payslip['payment_date'] }}', 
-                    '{{ $payslip['bonuses'] }}'
-                )" class="text-blue-500 hover:underline">
-                    View
-                    </button>
-                    |
-                    Delete
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-</table>
-
+                            <th class="border px-4 py-2">ID</th>
+                            <th class="border px-4 py-2">Employee Name</th>
+                            <th class="border px-4 py-2">Contact</th>
+                            <th class="border px-4 py-2">Employer</th>
+                            <th class="border px-4 py-2">Department</th>
+                            <th class="border px-4 py-2">Pay Period</th>
+                            <th class="border px-4 py-2">Payment Date</th>
+                            <th class="border px-4 py-2">Bonuses</th>
+                            <th class="border px-4 py-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($payslips as $payslip)
+                        <tr>
+                            <td class="border px-4 py-2">{{ $payslip['employee_id'] }}</td>
+                            <td class="border px-4 py-2">{{ $payslip['employee_name'] }}</td>
+                            <td class="border px-4 py-2">{{ $payslip['contact'] }}</td>
+                            <td class="border px-4 py-2">{{ $payslip['employer'] }}</td>
+                            <td class="border px-4 py-2">{{ $payslip['department'] }}</td>
+                            <td class="border px-4 py-2">{{ $payslip['pay_period'] }}</td>
+                            <td class="border px-4 py-2">{{ $payslip['payment_date'] }}</td>
+                            <td class="border px-4 py-2">{{ $payslip['bonuses'] }}</td>
+                            <td class="border px-4 py-2">
+                                <button onclick="openBonusModal(
+                                    '{{ $payslip['employee_id'] }}', 
+                                    '{{ $payslip['employee_name'] }}', 
+                                    '{{ $payslip['contact'] }}', 
+                                    '{{ $payslip['employer'] }}', 
+                                    '{{ $payslip['department'] }}', 
+                                    '{{ $payslip['pay_period'] }}', 
+                                    '{{ $payslip['payment_date'] }}', 
+                                    '{{ $payslip['bonuses'] }}'
+                                )" class="text-blue-500 hover:underline">
+                                    View
+                                </button>
+                                |
+                                Delete
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    <div id="payslipModal" class="hidden fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
-    <div class="bg-white p-4 rounded-lg shadow-lg w-auto max-w-4xl">
-        <h2 class="text-lg font-bold text-center mb-4">Payslip Details</h2>
 
-        <!-- Table Header (One Row) -->
-        <table class="w-full border-collapse border border-gray-300 text-sm">
-        <thead class="linear-gradient">
-                <tr>
-                <th class="border px-4 py-2">ID</th>
-            <th class="border px-4 py-2">Employee Name</th>
-            <th class="border px-4 py-2">Contact</th>
-            <th class="border px-4 py-2">Employer</th>
-            <th class="border px-4 py-2">Department</th>
-            <th class="border px-4 py-2">Pay Period</th>
-            <th class="border px-4 py-2">Payment Date</th>
-            <th class="border px-4 py-2">Bonuses</th>
-                </tr>
-            </thead>
-            <tbody>
-    <tr class="text-center font-semibold">
-        <td class="border px-2 py-1" id="modalEmployeeID"></td>
-        <td class="border px-2 py-1" id="modalEmployeeName"></td>
-        <td class="border px-2 py-1" id="modalContact"></td>
-        <td class="border px-2 py-1" id="modalEmployer"></td>
-        <td class="border px-2 py-1" id="modalDepartment"></td>
-        <td class="border px-2 py-1" id="modalPayPeriod"></td>
-        <td class="border px-2 py-1" id="modalPaymentDate"></td>
-        <td class="border px-2 py-1" id="modalBonuses"></td>
-    </tr>
-</tbody>
+    <!-- Bonus Modal -->
+    <div id="bonusModal" class="hidden fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
+        <div class="bg-white p-4 rounded-lg shadow-lg w-auto max-w-4xl max-h-[90vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-center flex-grow">Bonus Details</h2>
+            </div>
 
-        </table>
+            <!-- Modal Content (Scrollable) -->
+            <div class="overflow-x-auto flex-grow">
+                <table class="w-full border-collapse border border-gray-300 text-sm min-w-[1000px]">
+                    <thead class="linear-gradient">
+                        <tr>
+                            <th class="border px-4 py-2">ID</th>
+                            <th class="border px-4 py-2">Employee Name</th>
+                            <th class="border px-4 py-2">Contact</th>
+                            <th class="border px-4 py-2">Employer</th>
+                            <th class="border px-4 py-2">Department</th>
+                            <th class="border px-4 py-2">Pay Period</th>
+                            <th class="border px-4 py-2">Payment Date</th>
+                            <th class="border px-4 py-2">Bonuses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="text-center font-semibold">
+                            <td class="border px-2 py-1" id="modalEmployeeID"></td>
+                            <td class="border px-2 py-1" id="modalEmployeeName"></td>
+                            <td class="border px-2 py-1" id="modalContact"></td>
+                            <td class="border px-2 py-1" id="modalEmployer"></td>
+                            <td class="border px-2 py-1" id="modalDepartment"></td>
+                            <td class="border px-2 py-1" id="modalPayPeriod"></td>
+                            <td class="border px-2 py-1" id="modalPaymentDate"></td>
+                            <td class="border px-2 py-1" id="modalBonuses"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Modal Footer (Buttons at the Bottom) -->
-        <div class="flex justify-between items-center mt-4">
-            <a id="downloadPayslip" href="#" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Download PDF</a>
-            <button onclick="closePayslipModal()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Close</button>
+            <!-- Modal Footer (Buttons at the Bottom) -->
+            <div class="flex justify-between items-center mt-4">
+                <a id="downloadBonus" href="#" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Download PDF</a>
+                <button onclick="closeBonusModal()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Close</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    function openPayslipModal(id, name, contact, employer, department, period, date, bonuses) {
-    document.getElementById('modalEmployeeID').textContent = id;
-    document.getElementById('modalEmployeeName').textContent = name;
-    document.getElementById('modalContact').textContent = contact;
-    document.getElementById('modalEmployer').textContent = employer;
-    document.getElementById('modalDepartment').textContent = department;
-    document.getElementById('modalPayPeriod').textContent = period;
-    document.getElementById('modalPaymentDate').textContent = date;
-    document.getElementById('modalBonuses').textContent = bonuses;
+    <script>
+        function openBonusModal(id, name, contact, employer, department, period, date, bonuses) {
+            document.getElementById('modalEmployeeID').textContent = id;
+            document.getElementById('modalEmployeeName').textContent = name;
+            document.getElementById('modalContact').textContent = contact;
+            document.getElementById('modalEmployer').textContent = employer;
+            document.getElementById('modalDepartment').textContent = department;
+            document.getElementById('modalPayPeriod').textContent = period;
+            document.getElementById('modalPaymentDate').textContent = date;
+            document.getElementById('modalBonuses').textContent = bonuses;
 
-    document.getElementById('payslipModal').classList.remove('hidden');
-}
+            // Update download link dynamically
+            document.getElementById('downloadBonus').href = `{{ route('download.bonus') }}?employee_name=${name}&pay_period=${period}&payment_date=${date}&bonuses=${bonuses}`;
 
-function closePayslipModal() {
-    document.getElementById('payslipModal').classList.add('hidden');
-}
+            document.getElementById('bonusModal').classList.remove('hidden');
+        }
 
-
-
+        function closeBonusModal() {
+            document.getElementById('bonusModal').classList.add('hidden');
+        }
     </script>
 </body>
 </html>

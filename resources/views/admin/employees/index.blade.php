@@ -289,7 +289,7 @@
                 </div>
             @endforeach
 
-            <div class="flex justify-center mt-8">{{ $employees->links() }}</div>
+            
         </main>
     </div>
 
