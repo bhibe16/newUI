@@ -65,6 +65,20 @@
         <li class="notification-item flex items-center p-4 hover:bg-gray-50 transition-all {{ $notification->read_at ? '' : 'unread bg-blue-50' }}">
             <input type="checkbox" class="notification-checkbox mr-3 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" value="{{ $notification->id }}">
             
+ <!-- Profile Picture -->
+ <div class="flex-shrink-0 mr-3">
+    @if(!empty($notification->data['profile']['avatar']))
+        <img src="{{ asset('storage/' . $notification->data['profile']['avatar']) }}" 
+             alt="{{ $notification->data['profile']['name'] }}" 
+             class="w-10 h-10 rounded-full">
+    @else
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+            <span class="text-xs">{{ initials($notification->data['profile']['name'] ?? 'A') }}</span>
+        </div>
+    @endif
+</div>
+
+
             <div class="flex-1">
                 <a href="{{ $notification->data['url'] ?? '#' }}" class="text-blue-600 hover:underline font-medium">
                     {!! $notification->data['message'] ?? 'No message available' !!}

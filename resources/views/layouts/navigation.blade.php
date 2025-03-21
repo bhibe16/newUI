@@ -18,7 +18,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                         </svg>
                     </button>
-                    <div x-show="showChat" @click.outside="showChat = false" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div x-show="showChat" @click.outside="showChat = false" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg overflow-hidden z-50">
                         <div class="p-2 text-sm text-gray-700">Chat</div>
                         <ul class="divide-y divide-gray-200">
                             <li class="p-2 hover:bg-gray-100">Chat with Support</li>
@@ -43,7 +43,7 @@
             </span>
         @endif
     </button>
-    <div x-show="showAdminNotifications" @click.outside="showAdminNotifications = false" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg">
+    <div x-show="showAdminNotifications" @click.outside="showAdminNotifications = false" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg z-50">
         <div class="p-2 text-sm text-gray-700 border-b">Admin Notifications</div>
         <div class="max-h-36 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
             <ul class="divide-y divide-gray-200">
@@ -82,7 +82,7 @@
                     </button>
 
                     <!-- Notification Dropdown -->
-                    <div x-show="showEmployeeNotifications" @click.outside="showEmployeeNotifications = false" class="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
+                    <div x-show="showEmployeeNotifications" @click.outside="showEmployeeNotifications = false" class="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 z-50">
                         <div class="p-3 text-sm font-semibold text-gray-800 bg-gray-100">Notifications</div>
 
                         <ul class="divide-y divide-gray-200 max-h-64 overflow-auto">

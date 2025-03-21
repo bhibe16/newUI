@@ -22,25 +22,24 @@
             <h1 class="text-3xl font-bold mb-10 -mt-10 text-left">Employee List</h1>
 
             <div class="flex justify-between items-center mb-6">
-                <a href="{{ route('register') }}"
-                    class="bg-black text-white px-4 py-2 rounded-lg hover-gradient transition">+ Create Employee</a>
+    <a href="{{ route('register') }}" class="bg-black text-white px-4 py-2 rounded-lg hover-gradient transition">+ Create Employee</a>
 
-                <div class="flex items-center gap-3">
-                    <form method="GET" action="{{ route('admin.employees.index') }}" class="flex items-center gap-3">
-                        <div class="relative">
-                            <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
-                                class="border border-gray-300 rounded-lg px-4 py-2 w-72 focus:ring focus:ring-yellow-300"
-                                placeholder="Search employee...">
-                            <button type="submit"
-                                class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition">🔍</button>
-                        </div>
-                    </form>
-
-                    <button id="toggleButton"
-                        class="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition"
-                        onclick="toggleLayout()">Toggle View</button>
-                </div>
+    <div class="flex items-center gap-3">
+        <form method="GET" action="{{ route('admin.employees.index') }}" class="flex items-center gap-3 z-10">
+            <div class="relative">
+                <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
+                    class="border border-gray-300 rounded-lg px-4 py-2 w-72 focus:ring focus:ring-yellow-300"
+                    placeholder="Search employee...">
+                <button type="submit"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition">🔍</button>
             </div>
+        </form>
+
+        <button id="toggleButton"
+            class="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition"
+            onclick="toggleLayout()">Toggle View</button>
+    </div>
+</div>
             @if (session('success'))
     <div class="bg-green-500 text-white p-3 rounded-lg flex items-center">
         <svg class="w-6 h-6 mr-2 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -417,6 +416,14 @@ function updateStatus(selectElement) {
         selectElement.value = originalValue;
     });
 }
+function hideSearchBar() {
+        const searchForm = document.getElementById('searchForm');
+        if (searchForm.style.display === 'none') {
+            searchForm.style.display = 'flex';
+        } else {
+            searchForm.style.display = 'none';
+        }
+    }
 
     </script>
 </body>
