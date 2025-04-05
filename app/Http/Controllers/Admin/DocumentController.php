@@ -10,16 +10,20 @@ class DocumentController extends Controller
 {
     // Admin: View all documents that need to be reviewed
     public function index(Request $request)
-    {
-        $status = $request->query('status', 'pending'); // Default to 'pending'
-        
-        $documents = Document::when($status !== 'all', function ($query) use ($status) {
+{
+    $status = $request->query('status', 'pending');
+    
+    $documents = Document::query()
+        ->when($status !== 'all', function ($query) use ($status) {
             return $query->where('status', $status);
-        })->get();
-
-        
-        return view('admin.documents.index', compact('documents', 'status'));
-    }
+        })
+        ->with(['employee.position', 'employee.department'])
+        ->orderBy('created_at', 'desc') // Add sorting
+        ->paginate(10)
+        ->withQueryString(); // This maintains all query parameters
+    
+    return view('admin.documents.index', compact('documents', 'status'));
+}
 
     // Admin: Review a document (approve/reject)
     public function review(Document $document, Request $request)

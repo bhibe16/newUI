@@ -55,7 +55,7 @@
             <!-- Key Metrics Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <!-- Employee Users -->
-                <a href="{{ route('admin.users') }}?role=employee" class="transform transition-all duration-300 hover:scale-[1.02]">
+                <a href="" class="transform transition-all duration-300 hover:scale-[1.02]">
                     <div class="bg-white p-5 rounded-xl shadow-md hover:shadow-lg group cursor-pointer flex justify-between items-center border-l-4 border-yellow-400">
                         <div class="text-left">
                             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Employee Users</h3>

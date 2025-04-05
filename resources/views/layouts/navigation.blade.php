@@ -56,34 +56,6 @@
 
             <!-- Chat, Notification, and Settings -->
             <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-4">
-                <!-- Chat Icon -->
-                <div class="relative">
-                    <button @click="showChat = !showChat" 
-                            @click.outside="showChat = false"
-                            class="relative p-2 text-gray-500 hover:text-gray-700 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
-                    </button>
-                    <div x-show="showChat" 
-                         x-transition:enter="transition ease-out duration-100"
-                         x-transition:enter-start="opacity-0 scale-95"
-                         x-transition:enter-end="opacity-100 scale-100"
-                         x-transition:leave="transition ease-in duration-75"
-                         x-transition:leave-start="opacity-100 scale-100"
-                         x-transition:leave-end="opacity-0 scale-95"
-                         class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg overflow-hidden z-50">
-                        <div class="p-2 text-sm text-gray-700">Chat</div>
-                        <ul class="divide-y divide-gray-200">
-                            <li class="p-2 hover:bg-gray-100">Chat with Support</li>
-                            <li class="p-2 hover:bg-gray-100">Chat with Team</li>
-                        </ul>
-                        <a href="{{ route('admin.notifications') }}" class="block text-center text-blue-600 hover:underline p-2" @click.stop>
-                            View all
-                        </a>
-                    </div>
-                </div>
-
                 @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
                 <!-- Admin Notification Icon -->
                 <div class="relative">

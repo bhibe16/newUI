@@ -57,5 +57,14 @@ class Document extends Model
     {
         return $this->belongsTo(Employee::class, 'user_id', 'user_id'); // Match user_id from employees
     }
+    public function getDocumentTypeName()
+{
+    foreach(self::DOCUMENT_TYPES as $category => $types) {
+        if (array_key_exists($this->document_type, $types)) {
+            return $types[$this->document_type];
+        }
+    }
+    return 'Unknown Document Type';
+}
 }
 

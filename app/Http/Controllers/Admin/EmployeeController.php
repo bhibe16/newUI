@@ -13,106 +13,102 @@ use Illuminate\Http\Request;
 class EmployeeController extends Controller
 {
     public function index(Request $request)
-{
-    $query = $request->input('search');
-    $status = $request->input('status');
-
-    // Initialize the employee query
-    $employeeQuery = Employee::query()->with(['department', 'position']);
-
-    // Check for status in search query if not provided as parameter
-    $validStatuses = ['approved', 'reject', 'pending'];
-    if (!$status && $query) {
-        foreach ($validStatuses as $validStatus) {
-            if (strtolower($query) === $validStatus) {
-                $status = $validStatus;
-                $query = null; // Clear the query since we're using it for status
-                break;
-            }
-        }
-    }
-
-    // Apply status filter if provided (either from input or detected from search)
-    if ($status && in_array($status, $validStatuses)) {
-        $employeeQuery->where('status', $status);
-    }
-
-    // Check if query contains natural language patterns
-    $nlpFilters = $this->parseNaturalLanguageQuery($query);
+    {
+        $query = $request->input('search');
+        $status = $request->input('status');
     
-    // Apply NLP filters if detected
-    if ($nlpFilters) {
-        if (isset($nlpFilters['department'])) {
-            // Special case for HR - use exact match immediately
-            if ($nlpFilters['department'] === 'Human Resources') {
-                $department = Department::where('name', 'Human Resources')->first();
-            } else {
-                $normalized = $this->normalizeDepartment($nlpFilters['department']);
-                $department = Department::whereRaw('LOWER(TRIM(name)) = ?', [strtolower(trim($normalized))])
-                              ->first();
-                
-                if (!$department) {
-                    // Fallback for IT department
-                    if (strpos(strtolower($normalized), 'it') !== false || 
-                        strpos(strtolower($normalized), 'information technology') !== false) {
-                        $department = Department::where('name', 'IT (Information Technology)')->first();
-                    }
-                    // Fallback for other departments
-                    else {
-                        $department = Department::whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($normalized).'%'])
-                                      ->first();
-                    }
-                }
-            }
-            
-            if ($department) {
-                $employeeQuery->where('department_id', $department->id);
-            }
-        }
-        
-        if (isset($nlpFilters['position'])) {
-            $normalizedPosition = $this->normalizePosition($nlpFilters['position']);
-            
-            // Handle array results (for grouped positions like all managers)
-            if (is_array($normalizedPosition)) {
-                $employeeQuery->whereHas('position', function($q) use ($normalizedPosition) {
-                    $q->whereIn('name', $normalizedPosition);
-                });
-            } 
-            // Handle single position results
-            else {
-                $position = Position::where('name', $normalizedPosition)->first();
-                if ($position) {
-                    $employeeQuery->where('position_id', $position->id);
+        // Initialize the employee query
+        $employeeQuery = Employee::query()->with(['department', 'position']);
+    
+        // Check for status in search query if not provided as parameter
+        $validStatuses = ['approved', 'reject', 'pending'];
+        if (!$status && $query) {
+            foreach ($validStatuses as $validStatus) {
+                if (strtolower($query) === $validStatus) {
+                    $status = $validStatus;
+                    $query = null;
+                    break;
                 }
             }
         }
-    }
-    // Apply regular search if no NLP filters and query exists
-    elseif ($query) {
-        $employeeQuery->where(function($q) use ($query) {
-            $q->where('first_name', 'like', "%$query%")
-              ->orWhere('last_name', 'like', "%$query%")
-              ->orWhere('user_id', 'like', "%$query%")
-              ->orWhere('email', 'like', "%$query%")
-              ->orWhereHas('department', function($q) use ($query) {
-                  $q->where('name', 'like', "%$query%");
-              })
-              ->orWhereHas('position', function($q) use ($query) {
-                  $q->where('name', 'like', "%$query%");
-              });
-        });
-    }
-
-    // Get paginated results
-    $employees = $employeeQuery->paginate(10);
-
-    // Fetch related employment and educational data
-    $employment = EmploymentHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
-    $educational = EducationalHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
     
-    return view('admin.employees.index', compact('employees', 'employment', 'educational'));
-}
+        // Apply status filter if provided (either from input or detected from search)
+        if ($status && in_array($status, $validStatuses)) {
+            $employeeQuery->where('status', $status);
+        }
+    
+        // Check for NLP-style query parsing
+        $nlpFilters = $this->parseNaturalLanguageQuery($query);
+    
+        if ($nlpFilters) {
+            if (isset($nlpFilters['department'])) {
+                if ($nlpFilters['department'] === 'Human Resources') {
+                    $department = Department::where('name', 'Human Resources')->first();
+                } else {
+                    $normalized = $this->normalizeDepartment($nlpFilters['department']);
+                    $department = Department::whereRaw('LOWER(TRIM(name)) = ?', [strtolower(trim($normalized))])->first();
+    
+                    if (!$department) {
+                        if (strpos(strtolower($normalized), 'it') !== false || 
+                            strpos(strtolower($normalized), 'information technology') !== false) {
+                            $department = Department::where('name', 'IT (Information Technology)')->first();
+                        } else {
+                            $department = Department::whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($normalized) . '%'])->first();
+                        }
+                    }
+                }
+    
+                if ($department) {
+                    $employeeQuery->where('department_id', $department->id);
+                }
+            }
+    
+            if (isset($nlpFilters['position'])) {
+                $normalizedPosition = $this->normalizePosition($nlpFilters['position']);
+    
+                if (is_array($normalizedPosition)) {
+                    $employeeQuery->whereHas('position', function ($q) use ($normalizedPosition) {
+                        $q->whereIn('name', $normalizedPosition);
+                    });
+                } else {
+                    $position = Position::where('name', $normalizedPosition)->first();
+                    if ($position) {
+                        $employeeQuery->where('position_id', $position->id);
+                    }
+                }
+            }
+        } elseif ($query) {
+            $employeeQuery->where(function ($q) use ($query) {
+                $q->where('first_name', 'like', "%$query%")
+                  ->orWhere('last_name', 'like', "%$query%")
+                  ->orWhere('user_id', 'like', "%$query%")
+                  ->orWhere('email', 'like', "%$query%")
+                  ->orWhereHas('department', function ($q) use ($query) {
+                      $q->where('name', 'like', "%$query%");
+                  })
+                  ->orWhereHas('position', function ($q) use ($query) {
+                      $q->where('name', 'like', "%$query%");
+                  });
+            });
+        }
+    
+        // Paginate results
+        $employees = $employeeQuery->paginate(10);
+    
+        // Fetch related histories
+        $employment = EmploymentHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
+        $educational = EducationalHistory::whereIn('user_id', $employees->pluck('user_id'))->get()->groupBy('user_id');
+    
+        // Add status counts for dashboard overview
+        $statusCounts = [
+            'pending' => Employee::where('status', 'pending')->count(),
+            'approved' => Employee::where('status', 'approved')->count(),
+            'reject' => Employee::where('status', 'reject')->count(),
+        ];
+    
+        return view('admin.employees.index', compact('employees', 'employment', 'educational', 'statusCounts'));
+    }
+    
 
 private function parseNaturalLanguageQuery($query)
 {
@@ -409,18 +405,27 @@ public function restore($id)
         return view('employees.dashboard', compact('employees', 'records'));
     }
 
-    public function updateStatus(Request $request, $id)
-{
-    $request->validate([
-        'status' => 'required|in:approved,pending,reject'
-    ]);
-
-    $employee = Employee::findOrFail($id);
-    $employee->status = $request->status;
-    $employee->save();
-
-    return response()->json(['success' => true]);
-}
+    public function updateStatus(Request $request, Employee $employee)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,approved,reject'
+        ]);
+    
+        $employee->update(['status' => $validated['status']]);
+    
+        // Get updated counts
+        $counts = [
+            'total' => Employee::count(),
+            'pending' => Employee::where('status', 'pending')->count(),
+            'approved' => Employee::where('status', 'approved')->count(),
+            'reject' => Employee::where('status', 'reject')->count(),
+        ];
+    
+        return response()->json([
+            'message' => 'Status updated successfully',
+            'counts' => $counts
+        ]);
+    }
 
 
 }

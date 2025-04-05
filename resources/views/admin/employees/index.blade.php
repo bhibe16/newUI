@@ -162,38 +162,31 @@
         @include('layouts.sidebar')
 
         <main class="flex-grow p-6">
-          <!-- Header Section -->
-<div class="flex flex-col md:flex-row justify-between items-start mb-6 gap-4">
-    <div>
+
+<!-- Header Section -->
+<div class="flex justify-end w-full mb-4">
+    <div class="flex flex-row gap-3">
+        <button id="toggleButton"
+            class="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition flex items-center gap-2"
+            onclick="toggleLayout()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            <span id="toggleText">Table View</span>
+        </button>
+    </div>
+</div>
+
+
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-4 mb-6 w-full">
+    <!-- Title Section (Left) -->
+    <div class="w-full md:w-1/2">
         <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Employee Directory</h1>
         <p class="text-gray-600 mt-1">Manage your organization's employees</p>
     </div>
-    
-    <div class="flex flex-col items-end gap-3 w-full md:w-auto">
-        <!-- Buttons Row -->
-        <div class="flex flex-row gap-3">
-            <a href="{{ route('register') }}" 
-               class="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                </svg>
-                Add Employee
-            </a>
-            
-            <button id="toggleButton"
-                class="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition flex items-center gap-2"
-                onclick="toggleLayout()">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-                <span id="toggleText">Table View</span>
-            </button>
-        </div>
-        
-        <!-- Increased margin-top for better spacing -->
-        <div class="mt-4 w-full">
-            <!-- Search Bar -->
-            <div class="search-container bg-white p-2 rounded-lg shadow-sm border border-gray-200 w-full md:min-w-[300px] lg:min-w-[400px] xl:min-w-[500px]">
+
+    <!-- Search Bar Section (Right) -->
+<div class="w-full md:w-auto min-w-[300px] md:min-w-[350px] lg:min-w-[400px] xl:min-w-[500px]">
     <form method="GET" action="{{ route('admin.employees.index') }}" class="flex items-center">
         <div class="relative w-full">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -203,7 +196,7 @@
             </div>
             <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
                 class="block w-full pl-10 pr-12 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-300"
-                placeholder="Search by name, ID, department, or status (approved/pending/reject)">
+                placeholder="Search by name, ID, department, or status">
             <button type="submit"
                 class="absolute inset-y-0 right-0 px-4 text-white bg-yellow-500 rounded-r-lg hover:bg-yellow-600 flex items-center justify-center">
                 Search
@@ -211,6 +204,62 @@
         </div>
     </form>
 </div>
+
+</div>
+
+
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div class="flex justify-between">
+            <div>
+                <p class="text-gray-500">Total Employees</p>
+                <h3 id="total-count" class="text-2xl font-bold text-gray-800">{{ $employees->total() }}</h3>
+            </div>
+            <div class="bg-blue-100 p-3 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div class="flex justify-between">
+            <div>
+                <p class="text-gray-500">Pending Approval</p>
+                <h3 id="pending-count" class="text-2xl font-bold text-gray-800">{{ $statusCounts['pending'] ?? 0 }}</h3>
+            </div>
+            <div class="bg-amber-100 p-3 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div class="flex justify-between">
+            <div>
+                <p class="text-gray-500">Approved</p>
+                <h3 id="approved-count" class="text-2xl font-bold text-gray-800">{{ $statusCounts['approved'] ?? 0 }}</h3>
+            </div>
+            <div class="bg-green-100 p-3 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div class="flex justify-between">
+            <div>
+                <p class="text-gray-500">Rejected</p>
+                <h3 id="rejected-count" class="text-2xl font-bold text-gray-800">{{ $statusCounts['reject'] ?? 0 }}</h3>
+            </div>
+            <div class="bg-red-100 p-3 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
         </div>
     </div>
 </div>
@@ -654,57 +703,67 @@
         }
 
         // Update employee status with AJAX
-        async function updateStatus(selectElement) {
-            const employeeId = selectElement.dataset.employeeId;
-            const newStatus = selectElement.value;
-            
-            // Save original state for rollback
-            const originalValue = selectElement.value;
-            const originalClass = selectElement.className;
-            
-            // Optimistic UI update
-            selectElement.disabled = true;
-            selectElement.className = originalClass.replace(
-                /bg-(green|red|blue)-200 text-(green|red|blue)-700 border-(green|red|blue)-500/g, 
-                ''
-            );
-            
-            // Apply new styling based on selection
-            if (newStatus === 'approved') {
-                selectElement.classList.add('bg-green-200', 'text-green-700', 'border-green-500');
-            } else if (newStatus === 'reject') {
-                selectElement.classList.add('bg-red-200', 'text-red-700', 'border-red-500');
-            } else {
-                selectElement.classList.add('bg-blue-200', 'text-blue-700', 'border-blue-500');
-            }
-            
-            try {
-                const response = await fetch(`/employees/${employeeId}/update-status`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({ status: newStatus })
-                });
-                
-                if (!response.ok) throw new Error('Update failed');
-                
-                // Show success notification
-                showNotification('Status updated successfully', 'success');
-                
-            } catch (error) {
-                console.error('Error:', error);
-                // Revert UI on error
-                selectElement.value = originalValue;
-                selectElement.className = originalClass;
-                
-                // Show error notification
-                showNotification('Failed to update status', 'error');
-            } finally {
-                selectElement.disabled = false;
-            }
+async function updateStatus(selectElement) {
+    const employeeId = selectElement.dataset.employeeId;
+    const newStatus = selectElement.value;
+    
+    // Save original state for rollback
+    const originalValue = selectElement.value;
+    const originalClass = selectElement.className;
+    
+    // Optimistic UI update
+    selectElement.disabled = true;
+    selectElement.className = originalClass.replace(
+        /bg-(green|red|blue)-200 text-(green|red|blue)-700 border-(green|red|blue)-500/g, 
+        ''
+    );
+    
+    // Apply new styling based on selection
+    if (newStatus === 'approved') {
+        selectElement.classList.add('bg-green-200', 'text-green-700', 'border-green-500');
+    } else if (newStatus === 'reject') {
+        selectElement.classList.add('bg-red-200', 'text-red-700', 'border-red-500');
+    } else {
+        selectElement.classList.add('bg-blue-200', 'text-blue-700', 'border-blue-500');
+    }
+    
+    try {
+        const response = await fetch(`/employees/${employeeId}/update-status`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ status: newStatus })
+        });
+        
+        if (!response.ok) throw new Error('Update failed');
+        
+        const data = await response.json();
+        
+        // Update stats cards if counts were returned
+        if (data.counts) {
+            document.getElementById('total-count').textContent = data.counts.total;
+            document.getElementById('pending-count').textContent = data.counts.pending;
+            document.getElementById('approved-count').textContent = data.counts.approved;
+            document.getElementById('rejected-count').textContent = data.counts.reject;
         }
+        
+        // Show success notification
+        showNotification('Status updated successfully', 'success');
+        
+    } catch (error) {
+        console.error('Error:', error);
+        // Revert UI on error
+        selectElement.value = originalValue;
+        selectElement.className = originalClass;
+        
+        // Show error notification
+        showNotification('Failed to update status', 'error');
+    } finally {
+        selectElement.disabled = false;
+    }
+}
 
         // Show notification toast
         function showNotification(message, type) {

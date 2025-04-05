@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRIS - Notifications</title>
+    @php
+    function initials($name) {
+        $words = explode(' ', $name);
+        $initials = '';
+        foreach ($words as $word) {
+            if (!empty($word)) {
+                $initials .= strtoupper(substr($word, 0, 1));
+            }
+        }
+        return $initials;
+    }
+@endphp
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <script>
