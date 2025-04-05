@@ -20,22 +20,32 @@
         <!-- Centered Card Container -->
         <div class="flex flex-grow justify-center items-center p-6">
             <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-                <h1 class="text-2xl font-bold text-gray-800 mb-4">Document: {{ $document->document_name }}</h1>
+            <h1 class="text-2xl font-bold text-gray-800 mb-4 flex justify-between items-center">
+    Document: {{ $document->document_name }}
+    <!-- Fullscreen Icon Aligned to the Right -->
+    <button onclick="toggleFullScreen()" class="p-2 rounded-md hover:bg-gray-200">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8V3h5M3 16v5h5M21 8V3h-5M21 16v5h-5"/>
+        </svg>
+    </button>
+</h1>
 
                 <!-- Display Document Based on Type -->
                 <div class="mb-6 border border-gray-300 rounded-lg overflow-hidden">
-                    @if($isPdf)
-                        <!-- Display PDF with modified width and height -->
-                        <iframe src="{{ $documentUrl }}" width="100%" height="600px" class="rounded-lg"></iframe>
-                    @elseif($isImage)
-                        <!-- Display Image -->
-                        <img src="{{ $documentUrl }}" alt="Document Image" class="w-full rounded-lg">
-                    @elseif($isDoc)
-                        <!-- Display DOC/DOCX -->
-                        <p class="text-gray-600">This document is in DOC/DOCX format. You can <a href="{{ $documentUrl }}" class="text-blue-600 hover:underline">download the file</a> to view it.</p>
-                    @else
-                        <p class="text-gray-600">Document type is not supported for viewing.</p>
-                    @endif
+                    <div id="docViewer" class="rounded-lg">
+                        @if($isPdf)
+                            <!-- Display PDF -->
+                            <iframe src="{{ $documentUrl }}" width="100%" height="600px" class="rounded-lg w-full"></iframe>
+                        @elseif($isImage)
+                            <!-- Display Image -->
+                            <img src="{{ $documentUrl }}" alt="Document Image" class="w-full rounded-lg">
+                        @elseif($isDoc)
+                            <!-- Display DOC/DOCX -->
+                            <p class="text-gray-600">This document is in DOC/DOCX format. You can <a href="{{ $documentUrl }}" class="text-blue-600 hover:underline">download the file</a> to view it.</p>
+                        @else
+                            <p class="text-gray-600">Document type is not supported for viewing.</p>
+                        @endif
+                    </div>
                 </div>
 
                 <!-- Document Details -->
@@ -80,6 +90,26 @@
             </div>
         </div>
     </div>
+
+    <!-- Fullscreen Script -->
+    <script>
+        function toggleFullScreen() {
+            const iframe = document.querySelector("#docViewer iframe"); // Target the iframe inside docViewer
+
+            if (!iframe) {
+                alert("No document available for fullscreen.");
+                return;
+            }
+
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else {
+                iframe.requestFullscreen().catch(err => {
+                    alert(`Error attempting fullscreen mode: ${err.message}`);
+                });
+            }
+        }
+    </script>
 
 </body>
 </html>

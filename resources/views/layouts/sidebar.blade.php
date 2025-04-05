@@ -155,9 +155,11 @@
                 </svg>
             </button>
             <ul id="payroll-submenu" class="submenu space-y-2 pl-8 hidden">
+            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
                 <li><a href="{{ route('payslips.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Payslips</a></li>
                 <li><a href="{{ route('payslips.bonuses') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Bonuses</a></li>
                 <li><a href="{{ route('payslips.deduction') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Deductions</a></li>
+            @endif
             </ul>
         </li>
 
@@ -193,7 +195,9 @@
                 </svg>
             </button>
             <ul id="jobpost-submenu" class="submenu space-y-2 pl-8 hidden">
+            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
                 <li><a href="{{ route('jobposts.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Job Lists</a></li>
+            @endif
             </ul>
         </li>
 
@@ -227,7 +231,9 @@
                 </svg>
             </button>
             <ul id="performance-submenu" class="submenu space-y-2 pl-8 hidden">
-                <li><a href="#" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Example</a></li>
+            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
+                <li><a href="{{ route('successionplanning.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Example</a></li>
+            @endif
             </ul>
         </li>
 

@@ -26,35 +26,31 @@ class ProfileController extends Controller
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $user = $request->user();
+{
+    $user = $request->user();
 
-        $request->user()->fill($request->validated());
+    $validated = $request->validated();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+    // Handle profile picture upload
+    if ($request->hasFile('profilePic')) {
+        $imagePath = $request->file('profilePic')->store('images', 'public');
+
+        if ($user->profilePic) {
+            Storage::disk('public')->delete($user->profilePic);
         }
 
-        // Handle profile picture upload
-        if ($request->hasFile('profilePic')) {
-            $request->validate([
-                'profilePic' => ['image', 'mimes:jpg,jpeg,png', 'max:2048'], // 2MB max
-            ]);
-
-            $imagePath = $request->file('profilePic')->store('images', 'public');
-
-            // Delete old profile pic if exists
-            if ($user->profilePic) {
-                Storage::disk('public')->delete('images/' . $user->profilePic);
-            }
-
-            $user->profilePic = basename($imagePath);
-        }
-
-        $user->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        $validated['profilePic'] = $imagePath;
     }
+
+    // If email is changed, reset verification
+    if ($validated['email'] !== $user->email) {
+        $user->email_verified_at = null;
+    }
+
+    $user->fill($validated)->save();
+
+    return Redirect::route('profile.edit')->with('status', 'profile-updated');
+}
 
     /**
      * Delete the user's account.

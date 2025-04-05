@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\UserSyncController;
 use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Api\EmployeeAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,5 +33,4 @@ Route::get('/employees', [EmployeeController::class, 'apiIndex'])->name('api.emp
 
 Route::get('/sync-users', [UserSyncController::class, 'syncUsers'])->name('api.sync-users');
 
-
-
+Route::post('/employees/{employee}/status', [EmployeeAPIController::class, 'updateStatus']);

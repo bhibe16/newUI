@@ -87,6 +87,12 @@ class Employee extends Model
     {
         return $this->hasMany(EducationalHistory::class, 'user_id', 'user_id');
     }
+    
+public function document()
+{
+    return $this->hasMany(EmployeeDocument::class); // If you have a documents table
+}
+
 
 
    public function toSearchableArray()

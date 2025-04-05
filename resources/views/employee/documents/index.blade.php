@@ -7,6 +7,7 @@
     <meta name="logout-url" content="{{ route('logout') }}">
     <title>HRIS - Employee History</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="main-content min-h-screen bg-gray-100">
 
@@ -25,7 +26,7 @@
                 <!-- Upload Button -->
                 <div class="flex justify-end mb-4">
                     <a href="{{ route('employee.documents.upload') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
-                        + Upload New Document
+                        <i class="fas fa-plus mr-2"></i> Upload New Document
                     </a>
                 </div>
 
@@ -39,6 +40,7 @@
                                     <th class="text-left p-3">Document Name</th>
                                     <th class="text-left p-3">Uploaded Date</th>
                                     <th class="text-left p-3">Status</th>
+                                    <th class="text-left p-3">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white">
@@ -60,6 +62,38 @@
                                                 {{ ucfirst($document->status) }}
                                             </span>
                                         </td>
+                                        <td class="p-3">
+                                            <div class="flex space-x-2">
+                                            <a href="{{ route('protected.files', [
+    'user_id' => auth()->user()->user_id,
+    'filename' => basename($document->file_path)
+]) }}" 
+   target="_blank"
+   class="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50 transition"
+   title="View">
+   <i class="fas fa-eye"></i>
+</a>
+                                                <!-- For downloading -->
+                                                <a href="{{ route('protected.files.download', [
+    'user_id' => auth()->user()->user_id,
+    'filename' => basename($document->file_path)
+]) }}" 
+   class="text-green-600 hover:text-green-800 p-1 rounded hover:bg-green-50 transition"
+   title="Download">
+   <i class="fas fa-download"></i>
+</a>
+                                                <form action="{{ route('employee.documents.destroy', $document->id) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" 
+                                                            onclick="confirmDelete(this.form)"
+                                                            class="text-red-600 hover:text-red-800 p-1 rounded hover:bg-red-50 transition"
+                                                            title="Delete">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -69,5 +103,13 @@
             </div>
         </main>
     </div>
+
+    <script>
+        function confirmDelete(form) {
+            if (confirm('Are you sure you want to delete this document? This action cannot be undone.')) {
+                form.submit();
+            }
+        }
+    </script>
 </body>
 </html>

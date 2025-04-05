@@ -20,7 +20,7 @@
         <div class="flex items-start gap-6">
             <div class="flex flex-col items-start gap-4">
                 @if ($user->profilePic)
-                    <img src="{{ asset('storage/images/' . $user->profilePic) }}" alt="Profile" 
+                    <img src="{{ asset('storage/' . $user->profilePic) }}" alt="Profile" 
                          class="w-40 h-40 rounded-full border-4 border-gray-200 object-cover">
                 @else
                     <img src="{{ asset('storage/images/default.png') }}" alt="Default Profile" 
@@ -32,6 +32,7 @@
                     {{ $user->role ?? 'No Role Assigned' }}
                 </p>
 
+                <!-- Upload Profile Picture -->
                 <div class="w-full text-left">
                     <x-input-label for="profilePic" :value="__('Change Profile Picture')" />
                     <input id="profilePic" name="profilePic" type="file" 
@@ -47,6 +48,7 @@
 
             <!-- Name, Email, and Address Fields -->
             <div class="flex-1 space-y-6">
+                <!-- Name -->
                 <div>
                     <x-input-label for="name" :value="__('Name')" />
                     <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" 
@@ -54,6 +56,7 @@
                     <x-input-error class="mt-2" :messages="$errors->get('name')" />
                 </div>
 
+                <!-- Email -->
                 <div>
                     <x-input-label for="email" :value="__('Email')" />
                     <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" 
@@ -73,7 +76,7 @@
                     @endif
                 </div>
 
-                <!-- Address Field -->
+                <!-- Address -->
                 <div>
                     <x-input-label for="address" :value="__('Address')" />
                     <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" 

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Employee;
+use Illuminate\Support\Facades\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 
 class DocumentController extends Controller
@@ -64,15 +66,70 @@ class DocumentController extends Controller
 
     // Delete a document
     public function destroy($id)
-    {
-        $document = Document::where('user_id', auth()->user()->user_id)->findOrFail($id);
+{
+    $document = Document::where('user_id', auth()->user()->user_id)
+        ->findOrFail($id);
 
-        // Delete the file from storage
-        Storage::disk('public')->delete($document->file_path);
+    // Delete the file from storage
+    Storage::disk('public')->delete($document->file_path);
 
-        // Delete the document record from the database
-        $document->delete();
+    // Delete the document record
+    $document->delete();
 
-        return redirect()->route('employee.documents.index')->with('success', 'Document deleted successfully.');
+    return redirect()->route('employee.documents.index')
+        ->with('success', 'Document deleted successfully');
+}
+
+public function viewFile($user_id, $filename)
+{
+    // Verify authentication
+    if (!auth()->check()) {
+        abort(403, 'Unauthorized access');
     }
+
+    // Verify ownership
+    if (auth()->user()->user_id != $user_id) {
+        abort(403, 'You do not have permission to access this file');
+    }
+
+    // Find the document record
+    $document = Document::where('user_id', $user_id)
+                        ->where('file_path', 'like', '%'.$filename)
+                        ->firstOrFail();
+
+    // Get the full file path
+    $filePath = storage_path('app/public/' . $document->file_path);
+
+    // Check if file exists
+    if (!file_exists($filePath)) {
+        abort(404, 'File not found');
+    }
+
+    // Return the file with appropriate headers
+    return response()->file($filePath, [
+        'Content-Type' => mime_content_type($filePath),
+        'Content-Disposition' => 'inline; filename="'.basename($filePath).'"'
+    ]);
+}
+
+public function downloadFile($user_id, $filename)
+{
+    // Same verification as viewFile
+    if (!auth()->check() || auth()->user()->user_id != $user_id) {
+        abort(403);
+    }
+
+    $document = Document::where('user_id', $user_id)
+                        ->where('file_path', 'like', '%'.$filename)
+                        ->firstOrFail();
+
+    $filePath = storage_path('app/public/' . $document->file_path);
+
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+
+    return response()->download($filePath);
+}
+
 }

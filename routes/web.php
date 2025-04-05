@@ -16,6 +16,7 @@ use App\Http\Controllers\Employee\DocumentController as EmployeeDocumentControll
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Api\PayslipController;
 use App\Http\Controllers\Api\JobPostController;
+use App\Http\Controllers\Api\SuccessionPlanningController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
@@ -75,6 +76,7 @@ Route::middleware(['auth', 'admin', 'employee.status'])->group(function () {
 
 
 Route::get('/admin/jobposts', [JobPostController::class, 'index'])->name('jobposts.index');
+Route::get('/admin/successionplanning', [SuccessionPlanningController::class, 'index'])->name('successionplanning.index');
 
 
 Route::get('/admin/payslips', [PayslipController::class, 'index'])->name('payslips.index');
@@ -151,6 +153,10 @@ Route::middleware(['auth', 'employee', 'employee.status'])->group(function () {
     Route::get('/documents/upload', [EmployeeDocumentController::class, 'showForm'])->name('employee.documents.upload');
     Route::post('/documents', [EmployeeDocumentController::class, 'store'])->name('employee.documents.store');
     Route::get('/documents', [EmployeeDocumentController::class, 'index'])->name('employee.documents.index');
+    Route::delete('/documents/{document}', 
+    [App\Http\Controllers\Employee\DocumentController::class, 'destroy'])
+    ->name('employee.documents.destroy')
+    ->middleware('auth');
 });
 
 // Admin Document Routes
@@ -195,5 +201,17 @@ Route::patch('/employees/{employee}/update-status', [EmployeeController::class, 
 
         Route::get('/download-payslip', [PayslipController::class, 'downloadPayslip'])->name('download.payslip');
         Route::get('/downloadBonus', [PayslipController::class, 'downloadbonuses'])->name('download.bonus');
+
+        Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');
+
+        Route::get('/documents/{user_id}/{filename}', [\App\Http\Controllers\Employee\DocumentController::class, 'viewFile'])
+     ->name('protected.files')
+     ->middleware(['auth']);
+     
+     Route::get('/documents/{user_id}/{filename}/download', [\App\Http\Controllers\Employee\DocumentController::class, 'downloadFile'])
+     ->name('protected.files.download')
+     ->middleware(['auth']);
+     
+     
 
 require __DIR__.'/auth.php';

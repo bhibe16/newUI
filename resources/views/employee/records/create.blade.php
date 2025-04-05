@@ -38,7 +38,7 @@
                     <!-- Profile Picture Upload -->
                     <div class="flex flex-col items-center space-y-4">
                         <label for="profile_picture" class="block text-sm font-medium text-gray-700">Profile Picture</label>
-                        <input type="file" id="profile_picture" name="profile_picture" class="block w-full max-w-xs p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <input type="file" id="profile_picture" name="profile_picture" class="block w-full max-w-xs p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
                     </div>
 
                     <!-- Personal Information Section -->
@@ -47,25 +47,25 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
                             <div>
                                 <label for="first_name" class="block text-sm font-medium">First Name</label>
-                                <input type="text" id="first_name" name="first_name" value="{{ old('first_name') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <input type="text" id="first_name" name="first_name" value="{{ old('first_name') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" required>
                             </div>
                             <div>
                                 <label for="middle_name" class="block text-sm font-medium">Middle Name</label>
-                                <input type="text" id="middle_name" name="middle_name" value="{{ old('middle_name') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <input type="text" id="middle_name" name="middle_name" value="{{ old('middle_name') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                             </div>
                             <div>
                                 <label for="last_name" class="block text-sm font-medium">Last Name</label>
-                                <input type="text" id="last_name" name="last_name" value="{{ old('last_name') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <input type="text" id="last_name" name="last_name" value="{{ old('last_name') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" required>
                             </div>
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="date_of_birth" class="block text-sm font-medium">Date of Birth</label>
-                                <input type="date" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <input type="date" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" required>
                             </div>
                             <div>
                                 <label for="gender" class="block text-sm font-medium">Gender</label>
-                                <select id="gender" name="gender" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <select id="gender" name="gender" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" required>
                                     <option value="">Select Gender</option>
                                     @foreach (['Male', 'Female'] as $gender)
                                         <option value="{{ $gender }}" {{ old('gender') == $gender ? 'selected' : '' }}>{{ $gender }}</option>
@@ -74,11 +74,11 @@
                             </div>
                             <div>
                                 <label for="marital_status" class="block text-sm font-medium">Marital Status</label>
-                                <input type="text" id="marital_status" name="marital_status" value="{{ old('marital_status') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <input type="text" id="marital_status" name="marital_status" value="{{ old('marital_status') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" required>
                             </div>
                             <div>
                                 <label for="nationality" class="block text-sm font-medium">Nationality</label>
-                                <input type="text" id="nationality" name="nationality" value="{{ old('nationality') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <input type="text" id="nationality" name="nationality" value="{{ old('nationality') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" required>
                             </div>
                         </div>
                     </div>
@@ -89,15 +89,15 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="email" class="block text-sm font-medium">Email</label>
-                                <input type="email" id="email" name="email" value="{{ old('email', auth()->user()->email) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed" readonly>
+                                <input type="email" id="email" name="email" value="{{ old('email', auth()->user()->email) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed focus:ring-orange-500 focus:border-orange-500" readonly>
                             </div>
                             <div>
                                 <label for="phone" class="block text-sm font-medium">Phone</label>
-                                <input type="text" id="phone" name="phone" value="{{ old('phone', auth()->user()->phoneNumber) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" readonly>
+                                <input type="text" id="phone" name="phone" value="{{ old('phone', auth()->user()->phoneNumber) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed focus:ring-orange-500 focus:border-orange-500" readonly>
                             </div>
                             <div class="md:col-span-2">
                                 <label for="address" class="block text-sm font-medium">Address</label>
-                                <input type="text" id="address" name="address" value="{{ old('address', auth()->user()->address) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <input type="text" id="address" name="address" value="{{ old('address', auth()->user()->address) }}"  class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" required>
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="department" class="block text-sm font-medium">Department</label>
-                                <select id="department" name="department" class="form-select mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <select id="department" name="department" class="form-select mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                                     <option value="">Select Department</option>
                                     @foreach($departments as $department)
                                         <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -117,30 +117,25 @@
                             </div>
                             <div>
                                 <label for="position" class="block text-sm font-medium">Position</label>
-                                <select id="position" name="position" class="form-select mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <select id="position" name="position" class="form-select mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                                     <option value="">Select Position</option>
                                 </select>
                             </div>
                             <div>
                                 <label for="start_date" class="block text-sm font-medium">Start Date</label>
-                                <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" required>
                             </div>
                             <div>
                                 <label for="end_date" class="block text-sm font-medium">End Date</label>
-                                <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500" required>
                             </div>
                             <div>
                                 <label for="user_id" class="block text-sm font-medium">Employee ID</label>
-                                <input type="text" id="user_id" name="user_id" value="{{ old('user_id', auth()->user()->user_id) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed" readonly>
+                                <input type="text" id="user_id" name="user_id" value="{{ old('user_id', auth()->user()->user_id) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed focus:border-orange-500 focus:border-orange-500" readonly>
                             </div>
                             <div>
                                 <label for="employment_status" class="block text-sm font-medium">Employment Status</label>
-                                <select id="employment_status" name="employment_status" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
-                                    <option value="">Select Status</option>
-                                    @foreach (['Active ', 'Inactive'] as $employment_status)
-                                        <option value="{{ $employment_status }}" {{ old('employment_status') == $employment_status ? 'selected' : '' }}>{{ $employment_status }}</option>
-                                    @endforeach
-                                </select>
+                                <input id="employment_status" name="employment_status" value="{{ old('status', auth()->user()->status) }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed focus:ring-orange-500 focus:border-orange-500" required>
                             </div>  
                         </div>
                     </div>
