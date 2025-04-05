@@ -503,7 +503,7 @@
                                     <p class="text-xs text-gray-500 mt-1">${job.department || 'No department specified'}</p>
                                 </div>
                                 <span class="text-xs bg-${job.status === 'open' ? 'green' : 'red'}-100 text-${job.status === 'open' ? 'green' : 'red'}-600 px-2 py-1 rounded">
-                                    ${job.status === 'open' ? 'Active' : 'Closed'}
+                                    ${job.status === 'open' ? 'Active' : 'Open'}
                                 </span>
                             </div>
                             <div class="flex justify-between items-center mt-2">
