@@ -531,7 +531,7 @@
                                         <p><span class="info-label">Department:</span> <span class="info-value">{{ $employee->department->name }}</span></p>
                                         <p><span class="info-label">Position:</span> <span class="info-value">{{ $employee->position->name }}</span></p>
                                         <p><span class="info-label">Employment Status:</span> <span class="info-value">{{ ucfirst($employee->employment_status) }}</span></p>
-                                        <p><span class="info-label">Hire Date:</span> <span class="info-value">{{ $employee->hire_date ? \Carbon\Carbon::parse($employee->hire_date)->format('M d, Y') : 'N/A' }}</span></p>
+                                        <p><span class="info-label">Hire Date:</span> <span class="info-value">{{ $employee->start_date ? \Carbon\Carbon::parse($employee->start_date)->format('M d, Y') : 'N/A' }}</span></p>
                                     </div>
                                 </div>
                                 
@@ -703,67 +703,67 @@
         }
 
         // Update employee status with AJAX
-async function updateStatus(selectElement) {
-    const employeeId = selectElement.dataset.employeeId;
-    const newStatus = selectElement.value;
-    
-    // Save original state for rollback
-    const originalValue = selectElement.value;
-    const originalClass = selectElement.className;
-    
-    // Optimistic UI update
-    selectElement.disabled = true;
-    selectElement.className = originalClass.replace(
-        /bg-(green|red|blue)-200 text-(green|red|blue)-700 border-(green|red|blue)-500/g, 
-        ''
-    );
-    
-    // Apply new styling based on selection
-    if (newStatus === 'approved') {
-        selectElement.classList.add('bg-green-200', 'text-green-700', 'border-green-500');
-    } else if (newStatus === 'reject') {
-        selectElement.classList.add('bg-red-200', 'text-red-700', 'border-red-500');
-    } else {
-        selectElement.classList.add('bg-blue-200', 'text-blue-700', 'border-blue-500');
-    }
-    
-    try {
-        const response = await fetch(`/employees/${employeeId}/update-status`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({ status: newStatus })
-        });
-        
-        if (!response.ok) throw new Error('Update failed');
-        
-        const data = await response.json();
-        
-        // Update stats cards if counts were returned
-        if (data.counts) {
-            document.getElementById('total-count').textContent = data.counts.total;
-            document.getElementById('pending-count').textContent = data.counts.pending;
-            document.getElementById('approved-count').textContent = data.counts.approved;
-            document.getElementById('rejected-count').textContent = data.counts.reject;
+        async function updateStatus(selectElement) {
+            const employeeId = selectElement.dataset.employeeId;
+            const newStatus = selectElement.value;
+            
+            // Save original state for rollback
+            const originalValue = selectElement.value;
+            const originalClass = selectElement.className;
+            
+            // Optimistic UI update
+            selectElement.disabled = true;
+            selectElement.className = originalClass.replace(
+                /bg-(green|red|blue)-200 text-(green|red|blue)-700 border-(green|red|blue)-500/g, 
+                ''
+            );
+            
+            // Apply new styling based on selection
+            if (newStatus === 'approved') {
+                selectElement.classList.add('bg-green-200', 'text-green-700', 'border-green-500');
+            } else if (newStatus === 'reject') {
+                selectElement.classList.add('bg-red-200', 'text-red-700', 'border-red-500');
+            } else {
+                selectElement.classList.add('bg-blue-200', 'text-blue-700', 'border-blue-500');
+            }
+            
+            try {
+                const response = await fetch(`/employees/${employeeId}/update-status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                
+                if (!response.ok) throw new Error('Update failed');
+                
+                const data = await response.json();
+                
+                // Update stats cards if counts were returned
+                if (data.counts) {
+                    document.getElementById('total-count').textContent = data.counts.total;
+                    document.getElementById('pending-count').textContent = data.counts.pending;
+                    document.getElementById('approved-count').textContent = data.counts.approved;
+                    document.getElementById('rejected-count').textContent = data.counts.reject;
+                }
+                
+                // Show success notification
+                showNotification('Status updated successfully', 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                // Revert UI on error
+                selectElement.value = originalValue;
+                selectElement.className = originalClass;
+                
+                // Show error notification
+                showNotification('Failed to update status', 'error');
+            } finally {
+                selectElement.disabled = false;
+            }
         }
-        
-        // Show success notification
-        showNotification('Status updated successfully', 'success');
-        
-    } catch (error) {
-        console.error('Error:', error);
-        // Revert UI on error
-        selectElement.value = originalValue;
-        selectElement.className = originalClass;
-        
-        // Show error notification
-        showNotification('Failed to update status', 'error');
-    } finally {
-        selectElement.disabled = false;
-    }
-}
 
         // Show notification toast
         function showNotification(message, type) {
