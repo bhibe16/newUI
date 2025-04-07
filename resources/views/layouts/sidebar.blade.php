@@ -125,7 +125,8 @@
             </ul>
         </li>
 
-        <!-- Payroll Dropdown -->
+        <!-- Payroll Dropdown (Only for Admin/HR3) -->
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
         <li id="payroll-dropdown-parent" class="dropdown-parent">
             <button 
                 id="payroll-dropdown" 
@@ -155,13 +156,12 @@
                 </svg>
             </button>
             <ul id="payroll-submenu" class="submenu space-y-2 pl-8 hidden">
-            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
                 <li><a href="{{ route('payslips.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Payslips</a></li>
                 <li><a href="{{ route('payslips.bonuses') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Bonuses</a></li>
                 <li><a href="{{ route('payslips.deduction') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Deductions</a></li>
-            @endif
             </ul>
         </li>
+        @endif
 
         <!-- Jobpost Dropdown -->
         <li id="jobpost-dropdown-parent" class="dropdown-parent">
@@ -171,11 +171,11 @@
                 onclick="toggleDropdown('jobpost')"
             >
                 <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" width="24px" viewBox="0 0 100 100" class="fill-gray-700">
-                    <circle cx="46.3" cy="36.3" r="16"/>
-                    <path d="M66.6,51.1A11.39,11.39,0,0,0,55.2,62.5c0,7.7,8.1,15,10.6,16.9a1.09,1.09,0,0,0,1.5,0c2.5-2,10.6-9.2,10.6-16.9A11.25,11.25,0,0,0,66.6,51.1Zm0,16a4.7,4.7,0,1,1,4.7-4.7A4.76,4.76,0,0,1,66.6,67.1Z"/>
-                    <path d="M50.4,79.7h1.4c5.2-.5,2.4-3.7,2.4-3.7h0c-3.2-4.6-5-9.1-5-13.5a13.74,13.74,0,0,1,.6-4.2c.2-2-.6-2.5-1-2.7h-.2a18.48,18.48,0,0,0-2.4-.1,24.26,24.26,0,0,0-24,20.9c0,1.2.4,3.5,4.2,3.5H50.2C50.2,79.7,50.3,79.7,50.4,79.7Z"/>
-                </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" width="24px" viewBox="0 0 100 100" class="fill-gray-700">
+                        <circle cx="46.3" cy="36.3" r="16"/>
+                        <path d="M66.6,51.1A11.39,11.39,0,0,0,55.2,62.5c0,7.7,8.1,15,10.6,16.9a1.09,1.09,0,0,0,1.5,0c2.5-2,10.6-9.2,10.6-16.9A11.25,11.25,0,0,0,66.6,51.1Zm0,16a4.7,4.7,0,1,1,4.7-4.7A4.76,4.76,0,0,1,66.6,67.1Z"/>
+                        <path d="M50.4,79.7h1.4c5.2-.5,2.4-3.7,2.4-3.7h0c-3.2-4.6-5-9.1-5-13.5a13.74,13.74,0,0,1,.6-4.2c.2-2-.6-2.5-1-2.7h-.2a18.48,18.48,0,0,0-2.4-.1,24.26,24.26,0,0,0-24,20.9c0,1.2.4,3.5,4.2,3.5H50.2C50.2,79.7,50.3,79.7,50.4,79.7Z"/>
+                    </svg>
                     <span>Job Post</span>
                 </div>
                 <svg 
@@ -195,13 +195,12 @@
                 </svg>
             </button>
             <ul id="jobpost-submenu" class="submenu space-y-2 pl-8 hidden">
-            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
                 <li><a href="{{ route('jobposts.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Job Lists</a></li>
-            @endif
             </ul>
         </li>
 
-        <!-- Performance Dropdown -->
+        <!-- Performance Dropdown (Only for Admin/HR3) -->
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
         <li id="performance-dropdown-parent" class="dropdown-parent">
             <button 
                 id="performance-dropdown" 
@@ -231,11 +230,10 @@
                 </svg>
             </button>
             <ul id="performance-submenu" class="submenu space-y-2 pl-8 hidden">
-            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
                 <li><a href="{{ route('successionplanning.index') }}" class="block py-2 px-4 hover:text-[#faeac9]" onclick="setActive(this)">Succession Planning</a></li>
-            @endif
             </ul>
         </li>
+        @endif
 
         <!-- Trash Section (Admin Only) -->
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')

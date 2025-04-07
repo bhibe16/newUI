@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRIS - Job Portal</title>
+    <title>HRIS - Job Lists</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -63,7 +63,7 @@
             <div class="max-w-7xl mx-auto">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <div>
-                        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Job Openings</h1>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Job Lists</h1>
                         <p class="text-gray-600">Find your next career opportunity</p>
                     </div>
                     <div class="relative w-full md:w-64">

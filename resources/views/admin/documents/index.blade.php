@@ -44,7 +44,9 @@
                         
                         <div class="flex items-center gap-3">
                             <!-- Toggle Layout Button -->
-                            <button id="toggleButton" class="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition shadow-sm" onclick="toggleLayout()">
+                            <button id="toggleButton"
+            class="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition flex items-center gap-2"
+            onclick="toggleLayout()">
                                 <i class="fas fa-th"></i>
                                 <span>Card View</span>
                             </button>
@@ -154,18 +156,18 @@
 
                 <!-- Table Layout -->
                 <div id="tableLayout" class="hidden">
-                    <div class="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-200">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document Type</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uploaded</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+    <div class="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-200">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-yellow-500">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-800 uppercase tracking-wider">Employee</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-800 uppercase tracking-wider">Document Type</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-800 uppercase tracking-wider">Uploaded</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-800 uppercase tracking-wider">Status</th>
+                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-black-800 uppercase tracking-wider">Action</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach ($documents as $document)
                                     @php
                                         $employee = optional($document->Employee);

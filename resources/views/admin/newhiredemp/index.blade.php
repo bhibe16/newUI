@@ -89,18 +89,18 @@
 
             <!-- Employee Table -->
             <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm bg-white">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="table-header">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Profile</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Employee ID</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Full Name</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Position</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Department</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Email</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200" id="employees-table-body">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="table-header">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-800 uppercase tracking-wider bg-yellow-500">Profile</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-800 uppercase tracking-wider bg-yellow-500">Employee ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-800 uppercase tracking-wider bg-yellow-500">Full Name</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-800 uppercase tracking-wider bg-yellow-500">Position</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-800 uppercase tracking-wider bg-yellow-500">Department</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black-800 uppercase tracking-wider bg-yellow-500">Email</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200" id="employees-table-body">
                         @php
                             // Pagination logic
                             $currentPage = request()->get('page', 1);
