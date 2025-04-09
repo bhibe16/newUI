@@ -7,7 +7,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="logout-url" content="{{ route('logout') }}">
     <title>HRIS - Employee Management</title>
+   @production
+    <link rel="stylesheet" href="{{ asset('build/assets/style-Wg8zdAtV.css') }}">
+    <script type="module" src="{{ asset('build/assets/app-LM_T2gVS.js') }}"></script>
+@else
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+@endproduction
     <style>
         /* Custom styles for enhanced UX */
         .main-content {
@@ -531,7 +536,7 @@
                                         <p><span class="info-label">Department:</span> <span class="info-value">{{ $employee->department->name }}</span></p>
                                         <p><span class="info-label">Position:</span> <span class="info-value">{{ $employee->position->name }}</span></p>
                                         <p><span class="info-label">Employment Status:</span> <span class="info-value">{{ ucfirst($employee->employment_status) }}</span></p>
-                                        <p><span class="info-label">Hire Date:</span> <span class="info-value">{{ $employee->start_date ? \Carbon\Carbon::parse($employee->start_date)->format('M d, Y') : 'N/A' }}</span></p>
+                                        <p><span class="info-label">Hire Date:</span> <span class="info-value">{{ $employee->hire_date ? \Carbon\Carbon::parse($employee->hire_date)->format('M d, Y') : 'N/A' }}</span></p>
                                     </div>
                                 </div>
                                 
@@ -703,83 +708,52 @@
         }
 
         // Update employee status with AJAX
-        async function updateStatus(selectElement) {
-            const employeeId = selectElement.dataset.employeeId;
-            const newStatus = selectElement.value;
-            
-            // Save original state for rollback
-            const originalValue = selectElement.value;
-            const originalClass = selectElement.className;
-            
-            // Optimistic UI update
-            selectElement.disabled = true;
-            selectElement.className = originalClass.replace(
-                /bg-(green|red|blue)-200 text-(green|red|blue)-700 border-(green|red|blue)-500/g, 
-                ''
-            );
-            
-            // Apply new styling based on selection
-            if (newStatus === 'approved') {
-                selectElement.classList.add('bg-green-200', 'text-green-700', 'border-green-500');
-            } else if (newStatus === 'reject') {
-                selectElement.classList.add('bg-red-200', 'text-red-700', 'border-red-500');
-            } else {
-                selectElement.classList.add('bg-blue-200', 'text-blue-700', 'border-blue-500');
-            }
-            
-            try {
-                const response = await fetch(`/employees/${employeeId}/update-status`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({ status: newStatus })
-                });
-                
-                if (!response.ok) throw new Error('Update failed');
-                
-                const data = await response.json();
-                
-                // Update stats cards if counts were returned
-                if (data.counts) {
-                    document.getElementById('total-count').textContent = data.counts.total;
-                    document.getElementById('pending-count').textContent = data.counts.pending;
-                    document.getElementById('approved-count').textContent = data.counts.approved;
-                    document.getElementById('rejected-count').textContent = data.counts.reject;
-                }
-                
-                // Show success notification
-                showNotification('Status updated successfully', 'success');
-                
-            } catch (error) {
-                console.error('Error:', error);
-                // Revert UI on error
-                selectElement.value = originalValue;
-                selectElement.className = originalClass;
-                
-                // Show error notification
-                showNotification('Failed to update status', 'error');
-            } finally {
-                selectElement.disabled = false;
-            }
-        }
+// Update employee status with AJAX
+async function updateStatus(selectElement) {
+    const employeeId = selectElement.dataset.employeeId;
+    const newStatus = selectElement.value;
+    
+    // Show loading state
+    selectElement.disabled = true;
+    
+    try {
+        // Show success notification immediately
+        showSuccessNotification('Status updated successfully');
+        
+        // Submit the status change
+        const response = await fetch(`/employees/${employeeId}/update-status`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ status: newStatus })
+        });
+        
+        // Refresh the page after 1 second regardless of response
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+        
+    } catch (error) {
+        console.error('Error:', error);
+        selectElement.disabled = false;
+    }
+}
 
-        // Show notification toast
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `fixed bottom-4 right-4 px-4 py-2 rounded-md shadow-lg text-white ${
-                type === 'success' ? 'bg-green-500' : 'bg-red-500'
-            } animate-fade-in`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            // Remove notification after 3 seconds
-            setTimeout(() => {
-                notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
+// Show success notification toast
+function showSuccessNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'fixed bottom-4 right-4 px-4 py-2 rounded-md shadow-lg text-white bg-green-500 animate-fade-in';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    // Remove notification after 3 seconds
+    setTimeout(() => {
+        notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
 
         // Enhanced search functionality
         document.getElementById("searchInput").addEventListener("input", function() {

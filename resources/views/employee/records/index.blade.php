@@ -6,13 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="logout-url" content="{{ route('logout') }}">
     <title>HRIS</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     @production
     <link rel="stylesheet" href="{{ asset('build/assets/style-Wg8zdAtV.css') }}">
     <script type="module" src="{{ asset('build/assets/app-LM_T2gVS.js') }}"></script>
     @else
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endproduction
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
         .profile-card {
             background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
@@ -44,6 +44,9 @@
             background-image: linear-gradient(to right, transparent, #d1d5db, transparent);
             height: 1px;
         }
+        .relative {
+    isolation: isolate; /* Creates a new stacking context */
+}
         [x-cloak] { display: none !important; }
     </style>
 </head>
@@ -71,34 +74,41 @@
                             Employee Profile
                         </h2>
                         <!-- Edit dropdown -->
-                        <div x-data="{ open: false }" class="relative">
-                            <button @click="open = !open" class="edit-btn p-2 rounded-full bg-gray-100 hover:bg-yellow-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                </svg>
-                            </button>
-                            <div x-show="open" @click.away="open = false" x-transition
-                                class="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-10 border border-gray-200">
-                                <a href="{{ route('employee.records.edit', $empRecord->id) }}" 
-                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                    Edit Profile
-                                </a>
-                                <form action="{{ route('employee.records.destroy', $empRecord->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Are you sure?')" 
-                                        class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                        Delete
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+<div x-data="{ open: false }" class="relative" x-cloak>
+    <button @click.stop="open = !open" class="edit-btn p-2 rounded-full bg-gray-100 hover:bg-yellow-400">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+        </svg>
+    </button>
+    <div x-show="open" 
+         x-transition:enter="transition ease-out duration-100"
+         x-transition:enter-start="transform opacity-0 scale-95"
+         x-transition:enter-end="transform opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-75"
+         x-transition:leave-start="transform opacity-100 scale-100"
+         x-transition:leave-end="transform opacity-0 scale-95"
+         @click.outside="open = false"
+         class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200 origin-top-right">
+        <a href="{{ route('employee.records.edit', $empRecord->id) }}" 
+           class="block px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            Edit Profile
+        </a>
+        <form action="{{ route('employee.records.destroy', $empRecord->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button type="submit" onclick="return confirm('Are you sure?')" 
+                    class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
                     </div>
 
                     <!-- Profile content -->
@@ -471,5 +481,10 @@
             </div>
         </main>
     </div>
+    <script>
+    document.addEventListener('alpine:init', () => {
+        console.log('Alpine.js initialized successfully');
+    });
+</script>
 </body>
 </html>
