@@ -536,7 +536,7 @@
                                         <p><span class="info-label">Department:</span> <span class="info-value">{{ $employee->department->name }}</span></p>
                                         <p><span class="info-label">Position:</span> <span class="info-value">{{ $employee->position->name }}</span></p>
                                         <p><span class="info-label">Employment Status:</span> <span class="info-value">{{ ucfirst($employee->employment_status) }}</span></p>
-                                        <p><span class="info-label">Hire Date:</span> <span class="info-value">{{ $employee->hire_date ? \Carbon\Carbon::parse($employee->hire_date)->format('M d, Y') : 'N/A' }}</span></p>
+                                        <p><span class="info-label">Hire Date:</span> <span class="info-value">{{ $employee->start_date ? \Carbon\Carbon::parse($employee->start_date)->format('M d, Y') : 'N/A' }}</span></p>
                                     </div>
                                 </div>
                                 

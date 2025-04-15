@@ -154,6 +154,487 @@
                     </div>
                 </div>
             </div>
+
+<!-- Status Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <!-- Active Employees Card -->
+    <div class="bg-white p-4 rounded-xl shadow-md border-l-4 border-green-500 hover:shadow-lg transition-shadow duration-300">
+        <div class="flex justify-between items-center">
+            <div>
+                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Active</h3>
+                <p class="text-2xl font-bold text-gray-800 mt-1">{{ $activeUsers }}</p>
+                <p class="text-xs text-gray-500 mt-1">Currently working</p>
+            </div>
+            <div class="p-3 bg-green-100 rounded-xl text-green-600">
+                <i class="fas fa-user-check text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- On Leave Employees Card -->
+    <div class="bg-white p-4 rounded-xl shadow-md border-l-4 border-blue-500 hover:shadow-lg transition-shadow duration-300">
+        <div class="flex justify-between items-center">
+            <div>
+                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">On Leave</h3>
+                <p class="text-2xl font-bold text-gray-800 mt-1">{{ $onleaveUsers }}</p>
+                <p class="text-xs text-gray-500 mt-1">Temporary leave</p>
+            </div>
+            <div class="p-3 bg-blue-100 rounded-xl text-blue-600">
+                <i class="fas fa-umbrella-beach text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inactive Employees Card -->
+    <div class="bg-white p-4 rounded-xl shadow-md border-l-4 border-red-500 hover:shadow-lg transition-shadow duration-300">
+        <div class="flex justify-between items-center">
+            <div>
+                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Inactive</h3>
+                <p class="text-2xl font-bold text-gray-800 mt-1">{{ $inactiveUsers }}</p>
+                <p class="text-xs text-gray-500 mt-1">No longer active</p>
+            </div>
+            <div class="p-3 bg-red-100 rounded-xl text-red-600">
+                <i class="fas fa-user-slash text-xl"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Employee Records Section -->
+<div class="bg-white p-6 rounded-xl shadow-md mb-6 animate-fade-in-up animate-delay-300">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <i class="fas fa-users text-purple-500"></i> Employee Records
+        </h3>
+        
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <div class="relative w-full">
+                <input type="text" placeholder="Search employees..." 
+                    class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-300">
+                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+            <select class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:border-purple-300" name="employment_status" id="employmentStatusFilter">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="onleave">Onleave</option>
+                <option value="inactive">Inactive</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="overflow-x-auto rounded-lg border">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Created</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach($recentEmployees as $index => $employee)
+                <tr class="hover:bg-gray-50 transition-colors duration-150 group">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10">
+                                <img class="h-10 w-10 rounded-full object-cover" 
+                                    src="{{ $employee->profile_picture ? asset('storage/' . $employee->profile_picture) : asset('images/default-avatar.png') }}" 
+                                    alt="{{ $employee->first_name }}">
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">{{ $employee->first_name }} {{ $employee->last_name }}</div>
+                                <div class="text-sm text-gray-500">ID: {{ $employee->user_id ?? 'N/A' }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">{{ $employee->department->name ?? 'N/A' }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">{{ $employee->position->name ?? 'N/A' }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        @php
+                            $statusClasses = [
+                                'Active' => 'bg-green-100 text-green-800',
+                                'Onleave' => 'bg-yellow-100 text-yellow-800',
+                                'Inactive' => 'bg-red-100 text-red-800'
+                            ];
+                            $statusClass = $statusClasses[$employee->employment_status] ?? 'bg-gray-100 text-gray-800';
+                        @endphp
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClass }}">
+                            {{ ucfirst($employee->employment_status ?? 'N/A') }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ $employee->created_at ? \Carbon\Carbon::parse($employee->created_at)->format('M d, Y') : 'N/A' }}
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-sm text-gray-500">
+            Showing <span class="font-medium">{{ ($recentEmployees->currentPage() - 1) * $recentEmployees->perPage() + 1 }}</span> to 
+            <span class="font-medium">{{ min($recentEmployees->currentPage() * $recentEmployees->perPage(), $recentEmployees->total()) }}</span> of 
+            <span class="font-medium">{{ $recentEmployees->total() }}</span> employees
+        </div>
+        <div class="flex space-x-2">
+            @if($recentEmployees->currentPage() > 1)
+                <a href="{{ $recentEmployees->previousPageUrl() }}" 
+                    class="px-3 py-1 border rounded text-sm bg-white hover:bg-gray-50 transition-colors">
+                    Previous
+                </a>
+            @endif
+            
+            @if($recentEmployees->hasMorePages())
+                <a href="{{ $recentEmployees->nextPageUrl() }}" 
+                    class="px-3 py-1 border rounded text-sm bg-white hover:bg-gray-50 transition-colors">
+                    Next
+                </a>
+            @endif
+            
+            <a href="{{ route('admin.employees.index') }}" 
+                class="px-3 py-1 border rounded text-sm bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors">
+                View All
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Employee Start Date Distribution Chart -->
+<div class="bg-white p-6 rounded-xl shadow-md animate-fade-in-up">
+    <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <i class="fas fa-calendar-check text-blue-500"></i> Employee Start Date Distribution
+        </h3>
+        <div class="flex gap-2">
+            <button class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded" onclick="updateStartDateChart('monthly')">Monthly</button>
+            <button class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded" onclick="updateStartDateChart('yearly')">Yearly</button>
+            <button class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded" onclick="updateStartDateChart('quarterly')">Quarterly</button>
+        </div>
+    </div>
+    <div class="h-64">
+        <canvas id="startDateChart"></canvas>
+    </div>
+</div>
+<script>
+    // Employee Start Date Chart
+let startDateChart;
+let startDateChartData = {
+    monthly: @json($monthlyStartDates),
+    yearly: @json($yearlyStartDates),
+    quarterly: @json($quarterlyStartDates)
+};
+
+function initStartDateChart() {
+    const ctx = document.getElementById('startDateChart').getContext('2d');
+    
+    startDateChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: @json($monthNames), // Default to monthly
+            datasets: [{
+                label: 'Employees Started',
+                data: startDateChartData.monthly,
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true,
+                pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.parsed.y} employee${context.parsed.y !== 1 ? 's' : ''} started`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    },
+                    title: {
+                        display: true,
+                        text: 'Number of Employees'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function updateStartDateChart(timeframe) {
+    switch(timeframe) {
+        case 'monthly':
+            startDateChart.data.labels = @json($monthNames);
+            startDateChart.data.datasets[0].data = startDateChartData.monthly;
+            startDateChart.options.scales.x.title.text = 'Month';
+            break;
+        case 'yearly':
+            startDateChart.data.labels = @json(array_keys($yearlyStartDates));
+            startDateChart.data.datasets[0].data = Object.values(startDateChartData.yearly);
+            startDateChart.options.scales.x.title.text = 'Year';
+            break;
+        case 'quarterly':
+            startDateChart.data.labels = ['Q1', 'Q2', 'Q3', 'Q4'];
+            startDateChart.data.datasets[0].data = startDateChartData.quarterly;
+            startDateChart.options.scales.x.title.text = 'Quarter';
+            break;
+    }
+    startDateChart.update();
+}
+
+// Initialize the chart when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initStartDateChart();
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusFilter = document.getElementById('employmentStatusFilter');
+    const urlParams = new URLSearchParams(window.location.search);
+    const statusParam = urlParams.get('status');
+    
+    // Set initial value from URL
+    if (statusParam) {
+        statusFilter.value = statusParam;
+        filterTableByStatus(statusParam);
+    }
+    
+    statusFilter.addEventListener('change', function() {
+        const selectedStatus = this.value;
+        
+        // Update URL without reload if empty (client-side only)
+        if (selectedStatus === '') {
+            const newUrl = window.location.pathname;
+            window.history.pushState({}, '', newUrl);
+            filterTableByStatus('');
+            return;
+        }
+        
+        // For specific status, reload with server-side filtering
+        window.location.href = window.location.pathname + '?status=' + selectedStatus;
+    });
+    
+    function filterTableByStatus(status) {
+        const rows = document.querySelectorAll('tbody tr');
+        const lowerStatus = status.toLowerCase();
+        
+        rows.forEach(row => {
+            const statusCell = row.querySelector('td:nth-child(4) span');
+            if (!statusCell) return;
+            
+            const rowStatus = statusCell.textContent.trim().toLowerCase();
+            
+            if (status === '' || rowStatus === lowerStatus) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+});
+</script>
+<script>
+    // Employee Records functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const employeeRecordsBody = document.getElementById("employeeRecordsBody");
+    const prevBtn = document.getElementById("employeeRecordsPrev");
+    const nextBtn = document.getElementById("employeeRecordsNext");
+    const startCount = document.getElementById("employeeRecordsStart");
+    const endCount = document.getElementById("employeeRecordsEnd");
+    const totalCount = document.getElementById("employeeRecordsTotal");
+    
+    // Configuration
+    let currentPage = 1;
+    const employeesPerPage = 5;
+    
+    // Employment status color mapping
+    const employmentStatusColors = {
+        'active': 'bg-green-100 text-green-800',
+        'onleave': 'bg-yellow-100 text-yellow-800',
+        'inactive': 'bg-red-100 text-red-800'
+    };
+
+    // Helper functions
+    const formatDate = (dateString) => {
+        return dateString ? new Date(dateString).toLocaleDateString() : 'N/A';
+    };
+
+    const getEmploymentStatusClass = (employmentStatus) => {
+        return employmentStatusColors[employmentStatus] || 'bg-gray-100 text-gray-800';
+    };
+
+    // Loading states
+    const showLoadingState = () => {
+        employeeRecordsBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="px-6 py-4 text-center">
+                    <div class="animate-pulse flex justify-center">
+                        <div class="space-y-2">
+                            <div class="h-4 bg-gray-200 rounded w-32"></div>
+                            <div class="h-4 bg-gray-200 rounded w-64"></div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+    };
+
+    const showErrorState = () => {
+        employeeRecordsBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-red-500">
+                    Failed to load employee records. Please try again later.
+                </td>
+            </tr>
+        `;
+    };
+
+    const showEmptyState = () => {
+        employeeRecordsBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                    No employee records found
+                </td>
+            </tr>
+        `;
+    };
+
+    // Employee row template
+    const createEmployeeRow = (employee) => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50 transition-colors duration-150';
+        row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 h-10 w-10">
+                        <img class="h-10 w-10 rounded-full" src="${employee.photo_url || '/images/default-avatar.png'}" alt="${employee.name}">
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-sm font-medium text-gray-900">${employee.name}</div>
+                        <div class="text-sm text-gray-500">${employee.employee_id || 'N/A'}</div>
+                    </div>
+                </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">${employee.department?.name || 'N/A'}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">${employee.position?.name || 'N/A'}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getEmploymentStatusClass(employee.employment_status)}">
+                    ${employee.employment_status ? employee.employment_status.charAt(0).toUpperCase() + employee.employment_status.slice(1) : 'N/A'}
+                </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${formatDate(employee.hire_date)}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <a href="/admin/employees/${employee.id}" class="text-purple-600 hover:text-purple-900 mr-3">View</a>
+                <a href="/admin/employees/${employee.id}/edit" class="text-yellow-600 hover:text-yellow-900">Edit</a>
+            </td>
+        `;
+        return row;
+    };
+
+    // Update pagination UI
+    const updatePagination = (data) => {
+        startCount.textContent = data.from || 0;
+        endCount.textContent = data.to || 0;
+        totalCount.textContent = data.total || 0;
+        prevBtn.disabled = !data.prev_page_url;
+        nextBtn.disabled = !data.next_page_url;
+    };
+
+    // Load employee data
+    const loadEmployeeRecords = async (page = 1) => {
+        showLoadingState();
+        
+        try {
+            const response = await fetch(`/api/employees?page=${page}&per_page=${employeesPerPage}`);
+            const data = await response.json();
+            
+            if (!data.data.length) {
+                showEmptyState();
+                return;
+            }
+            
+            employeeRecordsBody.innerHTML = '';
+            data.data.forEach(employee => {
+                employeeRecordsBody.appendChild(createEmployeeRow(employee));
+            });
+            
+            updatePagination(data);
+            currentPage = page;
+        } catch (error) {
+            console.error("Error fetching employee records:", error);
+            showErrorState();
+        }
+    };
+
+    // Initialize with server-side data
+    const initEmployeeRecords = () => {
+        const recentEmployees = @json($recentEmployees);
+        
+        if (!recentEmployees.length) {
+            showEmptyState();
+            return;
+        }
+        
+        employeeRecordsBody.innerHTML = '';
+        recentEmployees.forEach(employee => {
+            employeeRecordsBody.appendChild(createEmployeeRow(employee));
+        });
+        
+        startCount.textContent = 1;
+        endCount.textContent = recentEmployees.length;
+        totalCount.textContent = @json($totalEmployees);
+    };
+
+    // Event listeners
+    prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            loadEmployeeRecords(currentPage - 1);
+        }
+    });
+    
+    nextBtn.addEventListener('click', () => {
+        loadEmployeeRecords(currentPage + 1);
+    });
+
+    // Initialize
+    initEmployeeRecords();
+});
+</script>
         </div>
     </div>
 
