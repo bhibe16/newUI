@@ -208,11 +208,6 @@
         </h3>
         
         <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-            <div class="relative w-full">
-                <input type="text" placeholder="Search employees..." 
-                    class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-300">
-                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-            </div>
             <select class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:border-purple-300" name="employment_status" id="employmentStatusFilter">
                 <option value="">All Status</option>
                 <option value="active">Active</option>
@@ -305,8 +300,11 @@
         </div>
     </div>
 </div>
+@php
+    $startDateMonthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    $yearLabels = array_keys($yearlyStartDates);
+@endphp
 
-<!-- Employee Start Date Distribution Chart -->
 <div class="bg-white p-6 rounded-xl shadow-md animate-fade-in-up">
     <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
@@ -322,98 +320,101 @@
         <canvas id="startDateChart"></canvas>
     </div>
 </div>
-<script>
-    // Employee Start Date Chart
-let startDateChart;
-let startDateChartData = {
-    monthly: @json($monthlyStartDates),
-    yearly: @json($yearlyStartDates),
-    quarterly: @json($quarterlyStartDates)
-};
 
-function initStartDateChart() {
-    const ctx = document.getElementById('startDateChart').getContext('2d');
-    
-    startDateChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: @json($monthNames), // Default to monthly
-            datasets: [{
-                label: 'Employees Started',
-                data: startDateChartData.monthly,
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                borderColor: 'rgba(59, 130, 246, 1)',
-                borderWidth: 2,
-                tension: 0.3,
-                fill: true,
-                pointBackgroundColor: 'rgba(59, 130, 246, 1)',
-                pointRadius: 4,
-                pointHoverRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
+<script>
+    let startDateChart;
+    let startDateChartData = {
+        monthly: @json(array_values($monthlyStartDates)),
+        yearly: @json(array_values($yearlyStartDates)),
+        quarterly: @json(array_values($quarterlyStartDates)),
+        yearLabels: @json($yearLabels),
+        monthLabels: @json($startDateMonthLabels)
+    };
+
+    function initStartDateChart() {
+        const ctx = document.getElementById('startDateChart').getContext('2d');
+
+        startDateChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: startDateChartData.monthLabels,
+                datasets: [{
+                    label: 'Employees Started',
+                    data: startDateChartData.monthly,
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true,
+                    pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return `${context.parsed.y} employee${context.parsed.y !== 1 ? 's' : ''} started`;
+                            }
+                        }
+                    }
                 },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `${context.parsed.y} employee${context.parsed.y !== 1 ? 's' : ''} started`;
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        },
+                        title: {
+                            display: true,
+                            text: 'Number of Employees'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
                         }
                     }
                 }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        precision: 0
-                    },
-                    title: {
-                        display: true,
-                        text: 'Number of Employees'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Month'
-                    }
-                }
             }
-        }
-    });
-}
-
-function updateStartDateChart(timeframe) {
-    switch(timeframe) {
-        case 'monthly':
-            startDateChart.data.labels = @json($monthNames);
-            startDateChart.data.datasets[0].data = startDateChartData.monthly;
-            startDateChart.options.scales.x.title.text = 'Month';
-            break;
-        case 'yearly':
-            startDateChart.data.labels = @json(array_keys($yearlyStartDates));
-            startDateChart.data.datasets[0].data = Object.values(startDateChartData.yearly);
-            startDateChart.options.scales.x.title.text = 'Year';
-            break;
-        case 'quarterly':
-            startDateChart.data.labels = ['Q1', 'Q2', 'Q3', 'Q4'];
-            startDateChart.data.datasets[0].data = startDateChartData.quarterly;
-            startDateChart.options.scales.x.title.text = 'Quarter';
-            break;
+        });
     }
-    startDateChart.update();
-}
 
-// Initialize the chart when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    initStartDateChart();
-});
+    function updateStartDateChart(timeframe) {
+        switch (timeframe) {
+            case 'monthly':
+                startDateChart.data.labels = startDateChartData.monthLabels;
+                startDateChart.data.datasets[0].data = startDateChartData.monthly;
+                startDateChart.options.scales.x.title.text = 'Month';
+                break;
+            case 'yearly':
+                startDateChart.data.labels = startDateChartData.yearLabels;
+                startDateChart.data.datasets[0].data = startDateChartData.yearly;
+                startDateChart.options.scales.x.title.text = 'Year';
+                break;
+            case 'quarterly':
+                startDateChart.data.labels = ['Q1', 'Q2', 'Q3', 'Q4'];
+                startDateChart.data.datasets[0].data = startDateChartData.quarterly;
+                startDateChart.options.scales.x.title.text = 'Quarter';
+                break;
+        }
+        startDateChart.update();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initStartDateChart();
+    });
 </script>
+
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
