@@ -4,18 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifications | HRIS Portal</title>
-    @php
-    function initials($name) {
-        $words = explode(' ', $name);
-        $initials = '';
-        foreach ($words as $word) {
-            if (!empty($word)) {
-                $initials .= strtoupper(substr($word, 0, 1));
-            }
-        }
-        return $initials;
-    }
-    @endphp
+   
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
@@ -103,50 +92,47 @@
                         
                         <div class="overflow-y-auto max-h-[500px] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                             <ul class="divide-y divide-gray-200">
-                                @foreach($notifications as $notification)
-                                <li class="notification-item p-4 hover:bg-gray-50 transition-all {{ $notification->read_at ? '' : 'unread bg-blue-50 notification-highlight' }}" data-id="{{ $notification->id }}" data-read="{{ $notification->read_at ? 'true' : 'false' }}">
-                                    <div class="flex items-start">
-                                        <input type="checkbox" class="notification-checkbox mt-1 mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" value="{{ $notification->id }}">
-                                        
-                                        <div class="flex-shrink-0 mr-3">
-                                            @if(!empty($notification->data['profile']['avatar']))
-                                                <img src="{{ asset('storage/' . $notification->data['profile']['avatar']) }}" 
-                                                     alt="{{ $notification->data['profile']['name'] }}" 
-                                                     class="w-9 h-9 rounded-full object-cover">
-                                            @else
-                                                <div class="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center">
-                                                    <span class="text-xs text-gray-600">{{ initials($notification->data['profile']['name'] ?? 'A') }}</span>
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="flex-1 min-w-0">
-                                            <a href="{{ $notification->data['url'] ?? '#' }}" class="block group">
-                                                <p class="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-                                                    {!! $notification->data['message'] ?? 'No message available' !!}
-                                                    @if(!$notification->read_at)<span class="unread-indicator"></span>@endif
-                                                </p>
-                                                <div class="flex flex-wrap items-center text-xs text-gray-500 mt-1 gap-x-2">
-                                                    <span>{!! $notification->data['profile']['name'] ?? 'System' !!}</span>
-                                                    <span>•</span>
-                                                    <span>{{ $notification->created_at->diffForHumans() }}</span>
-                                                    @if($notification->read_at)
-                                                        <span>•</span>
-                                                        <span class="text-gray-400">Read</span>
-                                                    @endif
-                                                </div>
-                                            </a>
-                                        </div>
-                                        
-                                        <button class="ml-2 text-gray-400 hover:text-gray-600 transition-colors" onclick="deleteSingleNotification('{{ $notification->id }}')">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </li>
-                                @endforeach
-
+                            @foreach($notifications as $notification)
+    <li class="notification-item p-4 hover:bg-gray-50 transition-all {{ $notification->read_at ? '' : 'unread bg-blue-50 notification-highlight' }}" data-id="{{ $notification->id }}" data-read="{{ $notification->read_at ? 'true' : 'false' }}">
+        <div class="flex items-start">
+            <input type="checkbox" class="notification-checkbox mt-1 mr-3 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" value="{{ $notification->id }}">
+            
+            <div class="flex-shrink-0 mr-3">
+    @if(isset($notification->data['profile_picture']) && $notification->data['profile_picture'])
+        <img src="{{ asset('storage/' . $notification->data['profile_picture']) }}" 
+             alt="{{ isset($notification->data['name']) ? $notification->data['name'] : 'User' }}"
+             class="w-9 h-9 rounded-full object-cover">
+    @else
+        <div class="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center">
+            <span class="text-xs text-gray-600">
+                {{ isset($notification->data['name']) ? initials($notification->data['name']) : 'DU' }}
+            </span>
+        </div>
+    @endif
+</div>
+            <div class="flex-1 min-w-0">
+                <a href="{{ $notification->data['url'] ?? '#' }}" class="block group">
+                    <p class="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+                        {!! $notification->data['message'] ?? 'No message available' !!}
+                        @if(!$notification->read_at)<span class="unread-indicator"></span>@endif
+                    </p>
+                    <div class="flex flex-col text-xs text-gray-500 mt-1">
+                        @if(isset($notification->data['user_id']))
+                            <span>EmployeeID: {{ $notification->data['user_id'] }}</span>
+                        @endif
+                        <span>{{ $notification->created_at->diffForHumans() }}</span>
+                    </div>
+                </a>
+            </div>
+            
+            <button class="ml-2 text-gray-400 hover:text-gray-600 transition-colors" onclick="deleteSingleNotification('{{ $notification->id }}')">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </li>
+@endforeach
                                 @foreach($terminationNotifications as $termination)
                                 <li class="notification-item p-4 bg-red-50 hover:bg-red-100 transition-all" data-id="{{ $termination['id'] }}" data-read="true">
                                     <div class="flex items-start">

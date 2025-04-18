@@ -24,7 +24,7 @@ class DocumentController extends Controller
     public function store(Request $request)
 {
     $request->validate([
-        'document_type' => 'required|string|max:255', // ✅ Validate document type
+        'document_type' => 'required|string|max:255',
         'document_file' => 'required|file|mimes:pdf,jpeg,png|max:2048',
     ]);
 
@@ -32,23 +32,24 @@ class DocumentController extends Controller
         $file = $request->file('document_file');
         $path = $file->storeAs('documents', time() . '-' . $file->getClientOriginalName(), 'public');
 
-        // ✅ Fetch employee details from the employees table
         $employee = Employee::where('user_id', auth()->user()->user_id)->first();
 
         if (!$employee) {
             return back()->with('error', 'Employee record not found.');
         }
-        \Log::info('Employee Found:', ['id' => $employee->id, 'user_id' => $employee->user_id]);
 
-        // ✅ Save document details in the database
-        Document::create([
-            'user_id' => $employee->user_id, // ✅ Store user_id from employees table
-            'first_name' => $employee->first_name, // ✅ Store first name
-            'last_name' => $employee->last_name, // ✅ Store last name
-            'document_type' => $request->document_type, // ✅ Store document type
+        $document = Document::create([
+            'user_id' => $employee->user_id,
+            'first_name' => $employee->first_name,
+            'last_name' => $employee->last_name,
+            'document_type' => $request->document_type,
             'file_path' => $path,
-            'status' => 'pending', // Default status
+            'status' => 'pending',
         ]);
+
+        // Notify admin and HR3 users
+        $adminUsers = \App\Models\User::whereIn('role', ['admin', 'hr3'])->get();
+        \Notification::send($adminUsers, new \App\Notifications\DocumentUploaded($document));
 
         return redirect()->route('employee.documents.index')->with('success', 'Document uploaded successfully!');
     }

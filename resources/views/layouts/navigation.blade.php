@@ -93,33 +93,49 @@
                          style="display: none;">
                         <div class="p-3 text-sm font-semibold text-gray-700 bg-gray-50 border-b">Admin Notifications</div>
                         <div class="max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                            <ul class="divide-y divide-gray-200">
-                                @forelse(Auth::user()->unreadNotifications as $notification)
-                                <li class="p-3 hover:bg-blue-50 transition-colors duration-150">
-                                    <a href="{{ $notification->data['url'] }}" 
-                                       @click="markAsRead('{{ $notification->id }}')" 
-                                       class="block text-sm text-gray-700 hover:text-blue-600">
-                                        <div class="flex items-start">
-                                            <div class="flex-shrink-0 pt-0.5">
-                                                <svg class="h-4 w-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                            </div>
-                                            <div class="ml-2">
-                                                <p class="text-sm">{{ $notification->data['message'] }}</p>
-                                                <p class="text-xs text-gray-500 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                @empty
-                                <li class="p-3 text-center text-gray-500 text-sm">
-                                    <svg class="mx-auto h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <p class="mt-2">No new notifications</p>
-                                </li>
-                                @endforelse
+                            <ul @forelse(Auth::user()->unreadNotifications as $notification)
+    <li class="p-3 hover:bg-blue-50 transition-colors duration-150">
+        <a href="{{ $notification->data['url'] ?? '#' }}" 
+           @click="markAsRead('{{ $notification->id }}')" 
+           class="block text-sm text-gray-700 hover:text-blue-600">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 pt-0.5">
+                    @if(isset($notification->data['status']))
+                        {{-- Document Reviewed Notification --}}
+                        @if ($notification->data['status'] == 'rejected')
+                            <svg class="h-4 w-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        @else
+                            <svg class="h-4 w-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        @endif
+                    @else
+                        {{-- Document Uploaded Notification --}}
+                        <svg class="h-4 w-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                    @endif
+                </div>
+                <div class="ml-2">
+                    <p class="text-sm">{{ $notification->data['message'] }}</p>
+                    @if(isset($notification->data['employee_name']))
+                        <p class="text-xs text-gray-500 mt-1">From: {{ $notification->data['employee_name'] }}</p>
+                    @endif
+                    <p class="text-xs text-gray-500 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                </div>
+            </div>
+        </a>
+    </li>
+@empty
+    <li class="p-3 text-center text-gray-500 text-sm">
+        <svg class="mx-auto h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="mt-2">No new notifications</p>
+    </li>
+@endforelse
                             </ul>
                         </div>
                         <a href="{{ route('admin.notifications') }}" class="block text-center text-blue-600 hover:bg-blue-50 p-3 text-sm font-medium border-t">View all notifications</a>

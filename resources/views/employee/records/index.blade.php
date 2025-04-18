@@ -6,12 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="logout-url" content="{{ route('logout') }}">
     <title>HRIS</title>
-     @production
-    <link rel="stylesheet" href="{{ asset('build/assets/style-qeVbSJLa.css') }}">
-    <script type="module" src="{{ asset('build/assets/app-LM_T2gVS.js') }}"></script>
-@else
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-@endproduction
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
    <style>
         .profile-card {

@@ -223,59 +223,65 @@
         </div>
     </div>
     
-    <div class="overflow-x-auto rounded-lg border">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Created</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @foreach($recentEmployees as $index => $employee)
-                <tr class="hover:bg-gray-50 transition-colors duration-150 group">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 h-10 w-10">
-                                <img class="h-10 w-10 rounded-full object-cover" 
-                                    src="{{ $employee->profile_picture ? asset('storage/' . $employee->profile_picture) : asset('images/default-avatar.png') }}" 
-                                    alt="{{ $employee->first_name }}">
+    <div class="overflow-hidden rounded-lg border">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Employee</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Department</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Position</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">Time Created</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="overflow-y-auto" style="max-height: 240px;">
+            <table class="min-w-full divide-y divide-gray-200">
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach($recentEmployees as $index => $employee)
+                    <tr class="hover:bg-gray-50 transition-colors duration-150 group">
+                        <td class="px-6 py-4 whitespace-nowrap w-1/4">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full object-cover" 
+                                        src="{{ $employee->profile_picture ? asset('storage/' . $employee->profile_picture) : asset('images/default-avatar.png') }}" 
+                                        alt="{{ $employee->first_name }}">
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">{{ $employee->first_name }} {{ $employee->last_name }}</div>
+                                    <div class="text-sm text-gray-500">ID: {{ $employee->user_id ?? 'N/A' }}</div>
+                                </div>
                             </div>
-                            <div class="ml-4">
-                                <div class="text-sm font-medium text-gray-900">{{ $employee->first_name }} {{ $employee->last_name }}</div>
-                                <div class="text-sm text-gray-500">ID: {{ $employee->user_id ?? 'N/A' }}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">{{ $employee->department->name ?? 'N/A' }}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">{{ $employee->position->name ?? 'N/A' }}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        @php
-                            $statusClasses = [
-                                'Active' => 'bg-green-100 text-green-800',
-                                'Onleave' => 'bg-yellow-100 text-yellow-800',
-                                'Inactive' => 'bg-red-100 text-red-800'
-                            ];
-                            $statusClass = $statusClasses[$employee->employment_status] ?? 'bg-gray-100 text-gray-800';
-                        @endphp
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClass }}">
-                            {{ ucfirst($employee->employment_status ?? 'N/A') }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ $employee->created_at ? \Carbon\Carbon::parse($employee->created_at)->format('M d, Y') : 'N/A' }}
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap w-1/4">
+                            <div class="text-sm text-gray-900">{{ $employee->department->name ?? 'N/A' }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap w-1/4">
+                            <div class="text-sm text-gray-900">{{ $employee->position->name ?? 'N/A' }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap w-1/6">
+                            @php
+                                $statusClasses = [
+                                    'Active' => 'bg-green-100 text-green-800',
+                                    'Onleave' => 'bg-yellow-100 text-yellow-800',
+                                    'Inactive' => 'bg-red-100 text-red-800'
+                                ];
+                                $statusClass = $statusClasses[$employee->employment_status] ?? 'bg-gray-100 text-gray-800';
+                            @endphp
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClass }}">
+                                {{ ucfirst($employee->employment_status ?? 'N/A') }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/6">
+                            {{ $employee->created_at ? \Carbon\Carbon::parse($employee->created_at)->format('M d, Y') : 'N/A' }}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
     
     <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">

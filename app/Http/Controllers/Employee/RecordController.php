@@ -107,13 +107,13 @@ class RecordController extends Controller
         }
 
         $admins = User::whereIn('role', ['admin', 'hr3'])->get();
-        foreach ($admins as $admin) {
-            $admin->notify(new EmployeeActivityNotification(
-                auth()->user()->name . " Has created a new employee record.",
-                $employee->profile_picture,
-                "EmployeeID: " . $employee->user_id
-            ));
-        }
+foreach ($admins as $admin) {
+    $admin->notify(new EmployeeActivityNotification(
+        auth()->user()->name . " has created a new employee record.",
+        auth()->user()->user_id,
+        false // This is not an update
+    ));
+}
 
         return redirect()->route('employee.records.index')->with('success', 'Employee record created successfully.');
     }
@@ -171,14 +171,15 @@ class RecordController extends Controller
 
         $record->update($validatedData);
 
-        $admins = User::whereIn('role', ['admin', 'hr3'])->get();
-        foreach ($admins as $admin) {
-            $admin->notify(new EmployeeActivityNotification(
-                auth()->user()->name . " Has updated her record.",
-                $record->profile_picture,
-                "EmployeeID: " . $record->user_id
-            ));
-        }
+       // In your update() method:
+$admins = User::whereIn('role', ['admin', 'hr3'])->get();
+foreach ($admins as $admin) {
+    $admin->notify(new EmployeeActivityNotification(
+        auth()->user()->name . " has updated their employee record.",
+        auth()->user()->user_id,
+        true // This is an update
+    ));
+}
 
         return redirect()->route('employee.records.index')->with('success', 'Record updated successfully.');
     }
