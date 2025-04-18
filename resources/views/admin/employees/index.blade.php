@@ -7,12 +7,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="logout-url" content="{{ route('logout') }}">
     <title>HRIS - Employee Management</title>
-   @production
-    <link rel="stylesheet" href="{{ asset('build/assets/style-Wg8zdAtV.css') }}">
-    <script type="module" src="{{ asset('build/assets/app-LM_T2gVS.js') }}"></script>
-@else
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-@endproduction
+
     <style>
         /* Custom styles for enhanced UX */
         .main-content {

@@ -265,80 +265,112 @@
     </div>
 
     <!-- JavaScript -->
-    <script>
-        // Layout Toggle Functionality
-        function toggleLayout() {
-            const cardLayout = document.getElementById('cardLayout');
-            const tableLayout = document.getElementById('tableLayout');
-            const toggleButton = document.getElementById('toggleButton');
-            const icon = toggleButton.querySelector('i');
-            const textSpan = toggleButton.querySelector('span');
+<script>
+    // Layout Toggle Functionality
+    function toggleLayout() {
+        const cardLayout = document.getElementById('cardLayout');
+        const tableLayout = document.getElementById('tableLayout');
+        const toggleButton = document.getElementById('toggleButton');
+        const icon = toggleButton.querySelector('i');
+        const textSpan = toggleButton.querySelector('span');
 
-            cardLayout.classList.toggle('hidden');
-            tableLayout.classList.toggle('hidden');
+        cardLayout.classList.toggle('hidden');
+        tableLayout.classList.toggle('hidden');
 
-            if (cardLayout.classList.contains('hidden')) {
-                icon.className = 'fas fa-th-large';
-                textSpan.textContent = 'Card View';
-                localStorage.setItem('layout', 'table');
-            } else {
-                icon.className = 'fas fa-list';
-                textSpan.textContent = 'Table View';
-                localStorage.setItem('layout', 'card');
+        if (cardLayout.classList.contains('hidden')) {
+            icon.className = 'fas fa-th-large';
+            textSpan.textContent = 'Card View';
+            localStorage.setItem('layout', 'table');
+        } else {
+            icon.className = 'fas fa-list';
+            textSpan.textContent = 'Table View';
+            localStorage.setItem('layout', 'card');
+        }
+        
+        // Reset search when changing layouts
+        document.getElementById('searchInput').value = '';
+        searchEmployee();
+    }
+
+    // Initialize layout based on localStorage
+    window.onload = function() {
+        const savedLayout = localStorage.getItem('layout') || 'card';
+        const cardLayout = document.getElementById('cardLayout');
+        const tableLayout = document.getElementById('tableLayout');
+        const toggleButton = document.getElementById('toggleButton');
+        const icon = toggleButton.querySelector('i');
+        const textSpan = toggleButton.querySelector('span');
+
+        if (savedLayout === 'table') {
+            cardLayout.classList.add('hidden');
+            tableLayout.classList.remove('hidden');
+            icon.className = 'fas fa-th-large';
+            textSpan.textContent = 'Card View';
+        } else {
+            cardLayout.classList.remove('hidden');
+            tableLayout.classList.add('hidden');
+            icon.className = 'fas fa-list';
+            textSpan.textContent = 'Table View';
+        }
+
+        // Filter functionality with 1-second delay
+        document.getElementById('statusFilter').addEventListener('change', function() {
+            setTimeout(() => {
+                document.getElementById('filterForm').submit();
+            }, 1000); // 1-second delay
+        });
+
+        // Enhanced search functionality with debounce
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                searchEmployee();
+            }, 300); // 300ms delay
+        });
+    }
+
+    function searchEmployee() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const cards = document.querySelectorAll('#cardLayout > div');
+        const rows = document.querySelectorAll('#tableLayout tbody tr');
+
+        // Search in card view
+        cards.forEach(card => {
+            const nameElement = card.querySelector('.text-gray-900');
+            const docTypeElement = card.querySelector('.text-gray-700');
+            
+            let displayCard = false;
+            
+            if (nameElement && nameElement.textContent.toLowerCase().includes(searchTerm)) {
+                displayCard = true;
             }
-        }
-
-        // Initialize layout based on localStorage
-        window.onload = function() {
-            const savedLayout = localStorage.getItem('layout') || 'card';
-            const cardLayout = document.getElementById('cardLayout');
-            const tableLayout = document.getElementById('tableLayout');
-            const toggleButton = document.getElementById('toggleButton');
-            const icon = toggleButton.querySelector('i');
-            const textSpan = toggleButton.querySelector('span');
-
-            if (savedLayout === 'table') {
-                cardLayout.classList.add('hidden');
-                tableLayout.classList.remove('hidden');
-                icon.className = 'fas fa-th-large';
-                textSpan.textContent = 'Card View';
-            } else {
-                cardLayout.classList.remove('hidden');
-                tableLayout.classList.add('hidden');
-                icon.className = 'fas fa-list';
-                textSpan.textContent = 'Table View';
+            
+            if (docTypeElement && docTypeElement.textContent.toLowerCase().includes(searchTerm)) {
+                displayCard = true;
             }
+            
+            card.style.display = displayCard ? '' : 'none';
+        });
 
-            // Filter functionality with 1-second delay
-            document.getElementById('statusFilter').addEventListener('change', function() {
-                setTimeout(() => {
-                    document.getElementById('filterForm').submit();
-                }, 1000); // 1-second delay
-            });
-
-            // Search functionality
-            document.getElementById('searchInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    searchEmployee();
-                }
-            });
-        }
-
-        function searchEmployee() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('#cardLayout > div');
-            const rows = document.querySelectorAll('#tableLayout tbody tr');
-
-            cards.forEach(card => {
-                const name = card.querySelector('.font-semibold').textContent.toLowerCase();
-                card.style.display = name.includes(searchTerm) ? '' : 'none';
-            });
-
-            rows.forEach(row => {
-                const name = row.querySelector('td:nth-child(1) .text-gray-900').textContent.toLowerCase();
-                row.style.display = name.includes(searchTerm) ? '' : 'none';
-            });
-        }
-    </script>
+        // Search in table view
+        rows.forEach(row => {
+            const nameElement = row.querySelector('td:nth-child(1) .text-gray-900');
+            const docTypeElement = row.querySelector('td:nth-child(2) .text-gray-900');
+            
+            let displayRow = false;
+            
+            if (nameElement && nameElement.textContent.toLowerCase().includes(searchTerm)) {
+                displayRow = true;
+            }
+            
+            if (docTypeElement && docTypeElement.textContent.toLowerCase().includes(searchTerm)) {
+                displayRow = true;
+            }
+            
+            row.style.display = displayRow ? '' : 'none';
+        });
+    }
+</script>
 </body>
 </html>

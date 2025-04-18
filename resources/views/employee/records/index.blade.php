@@ -7,12 +7,9 @@
     <meta name="logout-url" content="{{ route('logout') }}">
     <title>HRIS</title>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    @production
-    <link rel="stylesheet" href="{{ asset('build/assets/style-Wg8zdAtV.css') }}">
-    <script type="module" src="{{ asset('build/assets/app-LM_T2gVS.js') }}"></script>
-    @else
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @endproduction
+
     <style>
         .profile-card {
             background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);

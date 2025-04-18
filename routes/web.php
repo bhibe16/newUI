@@ -211,7 +211,6 @@ Route::patch('/employees/{employee}/update-status', [EmployeeController::class, 
      Route::get('/documents/{user_id}/{filename}/download', [\App\Http\Controllers\Employee\DocumentController::class, 'downloadFile'])
      ->name('protected.files.download')
      ->middleware(['auth']);
-     
-     
 
+     
 require __DIR__.'/auth.php';

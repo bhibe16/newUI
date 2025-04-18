@@ -20,7 +20,7 @@
         .image-container {
     width: 75vw; /* 50% of the viewport width */
     height: 95vh; /* 100% of the viewport height */
-    background-image: url('{{ asset('images/hr.gif') }}');
+    background-image: url('{{ asset('images/hr3.gif') }}');
     background-repeat: no-repeat;
     background-size: cover; /* ensures the image covers the whole container */
     background-position: center;

@@ -6,7 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="logout-url" content="{{ route('logout') }}">
     <title>HRIS Dashboard</title>
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Heroicons for icons -->
     <script src="https://unpkg.com/@heroicons/v2.0.18/24/outline/index.js"></script>
@@ -511,9 +513,7 @@
                                     <i class="far fa-calendar-alt mr-1"></i> 
                                     ${new Date(job.created_at).toLocaleDateString()}
                                 </span>
-                                <a href="https://hr3.gwamerchandise.com/admin/jobposts/${job.id}" target="_blank" class="text-xs text-blue-500 hover:underline">
-                                    View <i class="fas fa-external-link-alt ml-1 text-xs"></i>
-                                </a>
+                                
                             </div>
                         `;
                         jobList.appendChild(listItem);
