@@ -10,6 +10,8 @@ use App\Models\EmploymentHistory;
 use App\Models\EducationalHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\EmployeesExport;
 
 class EmployeeController extends Controller
 {
@@ -581,4 +583,11 @@ class EmployeeController extends Controller
             'counts' => $counts
         ]);
     }
+
+    public function export(Request $request)
+{
+    $status = $request->input('status');
+    
+    return Excel::download(new EmployeesExport($status), 'employees.xlsx');
+}
 }

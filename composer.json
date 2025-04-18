@@ -15,6 +15,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/scout": "^10.14",
         "laravel/tinker": "^2.8",
+        "maatwebsite/excel": "^3.1",
         "meilisearch/meilisearch-php": "^1.13"
     },
     "require-dev": {

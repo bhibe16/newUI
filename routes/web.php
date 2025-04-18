@@ -212,5 +212,12 @@ Route::patch('/employees/{employee}/update-status', [EmployeeController::class, 
      ->name('protected.files.download')
      ->middleware(['auth']);
 
+
+     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function() {
+        // ... your other admin routes ...
+        
+        Route::get('/employees/export', [EmployeeController::class, 'export'])
+            ->name('employees.export');
+    });
      
 require __DIR__.'/auth.php';

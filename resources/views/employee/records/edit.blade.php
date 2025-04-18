@@ -403,7 +403,7 @@
                                     <select id="employment_status" name="employment_status" required
                                         class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500">
                                         <option value="">Select Status</option>
-                                        @foreach (['Active', 'Inactive', 'On Leave', 'Terminated'] as $status)
+                                        @foreach (['Active', 'Inactive', 'Onleave'] as $status)
                                             <option value="{{ $status }}" {{ old('employment_status', $record->employment_status) == $status ? 'selected' : '' }}>
                                                 {{ $status }}
                                             </option>

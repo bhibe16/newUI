@@ -231,10 +231,14 @@
                                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed focus:border-blue-500" readonly>
                             </div>
                             <div>
-                                <label for="employment_status" class="block text-sm font-medium text-gray-700">Employment Status</label>
-                                <input id="employment_status" name="employment_status" value="{{ old('status', auth()->user()->status) }}" 
-                                       class="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed focus:ring-blue-500 focus:border-blue-500">
-                            </div>  
+    <label for="employment_status" class="block text-sm font-medium text-gray-700">Employment Status</label>
+    <select id="employment_status" name="employment_status" 
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+        <option value="Active" {{ old('employment_status', auth()->user()->status) == 'Active' ? 'selected' : '' }}>Active</option>
+        <option value="Inactive" {{ old('employment_status', auth()->user()->status) == 'Inactive' ? 'selected' : '' }}>Inactive</option>
+        <option value="Onleave" {{ old('employment_status', auth()->user()->status) == 'Onleave' ? 'selected' : '' }}>Onleave</option>
+    </select>
+</div>
                         </div>
                     </div>
 

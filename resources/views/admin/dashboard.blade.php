@@ -216,6 +216,10 @@
                 <option value="onleave">Onleave</option>
                 <option value="inactive">Inactive</option>
             </select>
+            <button onclick="exportEmployeeData()" class="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors">
+                <i class="fas fa-file-export"></i>
+                Export
+            </button>
         </div>
     </div>
     
@@ -1051,6 +1055,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeModal('positionModal');
             }
         });
+
+        function exportEmployeeData() {
+    // Get the current filter value
+    const statusFilter = document.getElementById('employmentStatusFilter').value;
+    
+    // Create export URL with filter parameter
+    let exportUrl = "{{ route('admin.employees.export') }}";
+    if (statusFilter) {
+        exportUrl += `?status=${statusFilter}`;
+    }
+    
+    // Trigger download
+    window.location.href = exportUrl;
+}
     </script>
 </body>
 </html>
