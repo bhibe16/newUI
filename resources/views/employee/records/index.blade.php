@@ -6,15 +6,20 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="logout-url" content="{{ route('logout') }}">
     <title>HRIS</title>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    
+     @production
+    <link rel="stylesheet" href="{{ asset('build/assets/style-qeVbSJLa.css') }}">
+    <script type="module" src="{{ asset('build/assets/app-LM_T2gVS.js') }}"></script>
+@else
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <style>
+@endproduction
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+   <style>
         .profile-card {
             background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 10; /* Lower than dropdown */
         }
         .section-title {
             color: #4b5563;
@@ -41,15 +46,23 @@
             background-image: linear-gradient(to right, transparent, #d1d5db, transparent);
             height: 1px;
         }
-        .relative {
-    isolation: isolate; /* Creates a new stacking context */
-}
         [x-cloak] { display: none !important; }
+        
+        /* New styles for dropdown fix */
+        .nav-container {
+            position: relative;
+            z-index: 1000;
+        }
+        .user-dropdown {
+            z-index: 1001 !important;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50">
     <!-- Navigation Bar -->
-    @include('layouts.navigation')
+    <div class="nav-container">
+        @include('layouts.navigation')
+    </div>
 
     <div class="flex">
         <!-- Sidebar -->
