@@ -191,6 +191,38 @@
                         </div>
                     </div>
 
+                    <!-- Emergency Contact Section -->
+<div class="form-section">
+    <h2 class="form-header text-lg font-semibold">Emergency Contact</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label for="emergency_contact_name" class="block text-sm font-medium text-gray-700 required-field">Full Name</label>
+            <input type="text" id="emergency_contact_name" name="emergency_contact[name]" value="{{ old('emergency_contact.name') }}" 
+                   class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+            <label for="emergency_contact_relationship" class="block text-sm font-medium text-gray-700 required-field">Relationship</label>
+            <input type="text" id="emergency_contact_relationship" name="emergency_contact[relationship]" value="{{ old('emergency_contact.relationship') }}" 
+                   class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+            <label for="emergency_contact_phone" class="block text-sm font-medium text-gray-700 required-field">Phone</label>
+            <input type="text" id="emergency_contact_phone" name="emergency_contact[phone]" value="{{ old('emergency_contact.phone') }}" 
+                   class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+            <label for="emergency_contact_email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" id="emergency_contact_email" name="emergency_contact[email]" value="{{ old('emergency_contact.email') }}" 
+                   class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div class="md:col-span-2">
+            <label for="emergency_contact_address" class="block text-sm font-medium text-gray-700">Address</label>
+            <input type="text" id="emergency_contact_address" name="emergency_contact[address]" value="{{ old('emergency_contact.address') }}" 
+                   class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+    </div>
+</div>
+
                     <!-- Professional Details Section -->
                     <div class="form-section">
                         <h2 class="form-header text-lg font-semibold">Professional Details</h2>

@@ -220,6 +220,48 @@
                         </div>
                     </div>
 
+                    <!-- Emergency Contact -->
+<div class="profile-card p-6">
+    <h3 class="section-title flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        Emergency Contact
+    </h3>
+    <div class="mt-4 space-y-3">
+        @if($empRecord->emergencyContacts->isNotEmpty())
+            @foreach($empRecord->emergencyContacts as $contact)
+                <p>
+                    <span class="info-label">Name:</span> 
+                    <span class="text-gray-700">{{ $contact->name }}</span>
+                </p>
+                <p>
+                    <span class="info-label">Relationship:</span> 
+                    <span class="text-gray-700">{{ $contact->relationship }}</span>
+                </p>
+                <p>
+                    <span class="info-label">Phone:</span> 
+                    <span class="text-gray-700">{{ $contact->phone }}</span>
+                </p>
+                @if($contact->email)
+                <p>
+                    <span class="info-label">Email:</span> 
+                    <span class="text-gray-700">{{ $contact->email }}</span>
+                </p>
+                @endif
+                @if($contact->address)
+                <p>
+                    <span class="info-label">Address:</span> 
+                    <span class="text-gray-700">{{ $contact->address }}</span>
+                </p>
+                @endif
+            @endforeach
+        @else
+            <p class="text-gray-500">No emergency contact information available</p>
+        @endif
+    </div>
+</div>
+
                     <!-- Professional Details -->
                     <div class="profile-card p-6">
                         <h3 class="section-title flex items-center">

@@ -219,7 +219,5 @@ Route::patch('/employees/{employee}/update-status', [EmployeeController::class, 
         Route::get('/employees/export', [EmployeeController::class, 'export'])
             ->name('employees.export');
     });
-
-    // Admin Notification Routes
-
+     
 require __DIR__.'/auth.php';

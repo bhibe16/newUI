@@ -23,7 +23,7 @@ class EmployeeController extends Controller
         $startDate = $request->input('start_date'); // Add this line
     
         // Initialize the employee query with relationships
-        $employeeQuery = Employee::query()->with(['department', 'position']);
+        $employeeQuery = Employee::query()->with(['department', 'position', 'emergencyContacts']);
     
         // Check for status in search query if not provided as parameter
         $validStatuses = ['approved', 'reject', 'pending'];

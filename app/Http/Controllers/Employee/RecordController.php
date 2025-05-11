@@ -70,6 +70,11 @@ class RecordController extends Controller
             'end_date' => 'nullable|date',
             'employment_status' => 'nullable|string|max:50',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'emergency_contact.name' => 'required|string|max:255',
+            'emergency_contact.relationship' => 'required|string|max:255',
+            'emergency_contact.phone' => 'required|string|max:20',
+            'emergency_contact.email' => 'nullable|email|max:255',
+            'emergency_contact.address' => 'nullable|string|max:500',
         ]);
 
         $profilePicturePath = null;
@@ -97,7 +102,12 @@ class RecordController extends Controller
             'profile_picture' => $profilePicturePath,
         ]);
 
-        // ✅ Sync profile picture to users.profilePic
+        // Create emergency contact
+        if ($request->has('emergency_contact')) {
+            $employee->emergencyContacts()->create($request->input('emergency_contact'));
+        }
+
+        // Sync profile picture to users.profilePic
         if ($profilePicturePath) {
             $user = User::find(auth()->user()->user_id);
             if ($user) {
@@ -107,13 +117,13 @@ class RecordController extends Controller
         }
 
         $admins = User::whereIn('role', ['admin', 'hr3'])->get();
-foreach ($admins as $admin) {
-    $admin->notify(new EmployeeActivityNotification(
-        auth()->user()->name . " has created a new employee record.",
-        auth()->user()->user_id,
-        false // This is not an update
-    ));
-}
+        foreach ($admins as $admin) {
+            $admin->notify(new EmployeeActivityNotification(
+                auth()->user()->name . " has created a new employee record.",
+                auth()->user()->user_id,
+                false // This is not an update
+            ));
+        }
 
         return redirect()->route('employee.records.index')->with('success', 'Employee record created successfully.');
     }
@@ -121,7 +131,7 @@ foreach ($admins as $admin) {
     public function edit($id)
     {
         $record = Employee::where('user_id', auth()->user()->user_id)
-            ->with(['department', 'position'])
+            ->with(['department', 'position', 'emergencyContacts'])
             ->findOrFail($id);
 
         $departments = Department::all();
@@ -149,6 +159,11 @@ foreach ($admins as $admin) {
             'end_date' => 'nullable|date',
             'employment_status' => 'nullable|string|max:50',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'emergency_contact.name' => 'required|string|max:255',
+            'emergency_contact.relationship' => 'required|string|max:255',
+            'emergency_contact.phone' => 'required|string|max:20',
+            'emergency_contact.email' => 'nullable|email|max:255',
+            'emergency_contact.address' => 'nullable|string|max:500',
         ]);
 
         $record = Employee::where('user_id', auth()->user()->user_id)->findOrFail($id);
@@ -161,7 +176,7 @@ foreach ($admins as $admin) {
             $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
             $validatedData['profile_picture'] = $profilePicturePath;
 
-            // ✅ Sync profile picture to users.profilePic
+            // Sync profile picture to users.profilePic
             $user = User::find(auth()->user()->user_id);
             if ($user) {
                 $user->profilePic = $profilePicturePath;
@@ -171,15 +186,22 @@ foreach ($admins as $admin) {
 
         $record->update($validatedData);
 
-       // In your update() method:
-$admins = User::whereIn('role', ['admin', 'hr3'])->get();
-foreach ($admins as $admin) {
-    $admin->notify(new EmployeeActivityNotification(
-        auth()->user()->name . " has updated their employee record.",
-        auth()->user()->user_id,
-        true // This is an update
-    ));
-}
+        // Update or create emergency contact
+        if ($request->has('emergency_contact')) {
+            $record->emergencyContacts()->updateOrCreate(
+                ['employee_id' => $record->id],
+                $request->input('emergency_contact')
+            );
+        }
+
+        $admins = User::whereIn('role', ['admin', 'hr3'])->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new EmployeeActivityNotification(
+                auth()->user()->name . " has updated their employee record.",
+                auth()->user()->user_id,
+                true // This is an update
+            ));
+        }
 
         return redirect()->route('employee.records.index')->with('success', 'Record updated successfully.');
     }

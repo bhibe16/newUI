@@ -512,30 +512,61 @@
                                 <hr class="section-divider my-6">
                                 
                                 <!-- Personal Information -->
-                                <div>
-                                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Personal Information</h3>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <p><span class="info-label">First Name:</span> <span class="info-value">{{ $employee->first_name }}</span></p>
-                                        <p><span class="info-label">Middle Name:</span> <span class="info-value">{{ $employee->middle_name ?? 'N/A' }}</span></p>
-                                        <p><span class="info-label">Last Name:</span> <span class="info-value">{{ $employee->last_name }}</span></p>
-                                        <p><span class="info-label">Date of Birth:</span> <span class="info-value">{{ $employee->date_of_birth ? \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y') : 'N/A' }}</span></p>
-                                        <p><span class="info-label">Gender:</span> <span class="info-value">{{ $employee->gender ?? 'N/A' }}</span></p>
-                                        <p><span class="info-label">Address:</span> <span class="info-value">{{ $employee->address ?? 'N/A' }}</span></p>
-                                    </div>
-                                </div>
+<div>
+    <h3 class="text-lg font-semibold text-gray-800 mb-4">Personal Information</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p><span class="info-label">First Name:</span> <span class="info-value font-bold">{{ $employee->first_name }}</span></p>
+        <p><span class="info-label">Gender:</span> <span class="info-value">{{ $employee->gender ?? 'N/A' }}</span></p>
+        <p><span class="info-label">Last Name:</span> <span class="info-value font-bold">{{ $employee->last_name }}</span></p>
+        <p><span class="info-label">Date of Birth:</span> <span class="info-value">{{ $employee->date_of_birth ? \Carbon\Carbon::parse($employee->date_of_birth)->format('M d, Y') : 'N/A' }}</span></p>
+        <p><span class="info-label">Middle Name:</span> <span class="info-value font-bold">{{ $employee->middle_name ?? 'N/A' }}</span></p>
+        <p><span class="info-label">Address:</span> <span class="info-value">{{ $employee->address ?? 'N/A' }}</span></p>
+        <p><span class="info-label">Marital Status:</span> <span class="info-value">{{ $employee->marital_status ?? 'N/A' }}</span></p>
+        <p><span class="info-label">Nationality:</span> <span class="info-value">{{ $employee->nationality ?? 'N/A' }}</span></p>
+    </div>
+</div>
+<hr class="section-divider my-6">
+                                
+<!-- Emergency Contact Information -->
+<div>
+    <h3 class="text-lg font-semibold text-gray-800 mb-4">Emergency Contact Information</h3>
+    @if($employee->emergencyContacts->isNotEmpty())
+        @foreach($employee->emergencyContacts as $contact)
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <p><span class="info-label">Name:</span> <span class="info-value">{{ $contact->name }}</span></p>
+                <p><span class="info-label">Relationship:</span> <span class="info-value">{{ $contact->relationship }}</span></p>
+                <p><span class="info-label">Phone:</span> <span class="info-value">{{ $contact->phone }}</span></p>
+                @if($contact->email)
+                    <p><span class="info-label">Email:</span> <span class="info-value">{{ $contact->email }}</span></p>
+                @endif
+                <p><span class="info-label">Address:</span> <span class="info-value">{{ $contact->address }}</span></p>
+            </div>
+        @endforeach
+    @else
+        <p class="text-gray-500">No emergency contacts found.</p>
+    @endif
+</div>
                                 
                                 <hr class="section-divider my-6">
                                 
-                                <!-- Employment Information -->
-                                <div>
-                                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Employment Information</h3>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <p><span class="info-label">Department:</span> <span class="info-value">{{ $employee->department->name }}</span></p>
-                                        <p><span class="info-label">Position:</span> <span class="info-value">{{ $employee->position->name }}</span></p>
-                                        <p><span class="info-label">Employment Status:</span> <span class="info-value">{{ ucfirst($employee->employment_status) }}</span></p>
-                                        <p><span class="info-label">Hire Date:</span> <span class="info-value">{{ $employee->start_date ? \Carbon\Carbon::parse($employee->start_date)->format('M d, Y') : 'N/A' }}</span></p>
-                                    </div>
-                                </div>
+                               <!-- Employment Information -->
+<div>
+    <h3 class="text-lg font-semibold text-gray-800 mb-4">Employment Information</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p><span class="info-label">Department:</span> <span class="info-value">{{ $employee->department->name }}</span></p>
+        <p><span class="info-label">Position:</span> <span class="info-value">{{ $employee->position->name }}</span></p>
+        <p><span class="info-label">Employment Status:</span> <span class="info-value">{{ ucfirst($employee->employment_status) }}</span></p>
+        <p><span class="info-label">Hire Date:</span> <span class="info-value">{{ $employee->start_date ? \Carbon\Carbon::parse($employee->start_date)->format('M d, Y') : 'N/A' }}</span></p>
+        <p><span class="info-label">Work Location:</span> <span class="info-value">{{ fake()->randomElement(['Office', 'Remote', 'Hybrid']) }}</span></p>
+        <p><span class="info-label">Work Schedule:</span> <span class="info-value">{{ fake()->randomElement([
+            'Monday-Friday (8:00 AM - 5:00 PM)',
+            'Monday-Saturday (9:00 AM - 6:00 PM)',
+            'Flexible Hours (40hrs/week)',
+            'Shift Schedule (Rotating)',
+            'Night Shift (10:00 PM - 7:00 AM)'
+        ]) }}</span></p>
+    </div>
+</div>
                                 
                                 <!-- Work Experience & Education -->
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
@@ -623,6 +654,7 @@
                                     <button onclick="toggleModal('modal-{{ $employee->id }}')" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition">
                                         Close
                                     </button>
+                                    <!--
                                     <form action="{{ url('admin/employees/' . $employee->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this employee? This action cannot be undone.');">
                                         @csrf
                                         @method('DELETE')
@@ -633,6 +665,7 @@
                                             Delete Record
                                         </button>
                                     </form>
+                                    -->
                                 </div>
                             </div>
                         </div>
@@ -796,25 +829,34 @@ function showSuccessNotification(message) {
             });
         }
 
-        // Close modal when clicking outside
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('modal-overlay')) {
-                const openModal = document.querySelector('.modal:not(.hidden)');
-                if (openModal) {
-                    toggleModal(openModal.id);
-                }
+      // Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    // Check if click is on modal overlay
+    if (event.target.classList.contains('modal-overlay')) {
+        // Find all modals (elements with ID starting with 'modal-')
+        const modals = document.querySelectorAll('[id^="modal-"]');
+        modals.forEach(modal => {
+            // If modal is visible, close it
+            if (!modal.classList.contains('hidden')) {
+                toggleModal(modal.id);
             }
         });
+    }
+});
 
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                const openModal = document.querySelector('.modal:not(.hidden)');
-                if (openModal) {
-                    toggleModal(openModal.id);
-                }
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        // Find all modals (elements with ID starting with 'modal-')
+        const modals = document.querySelectorAll('[id^="modal-"]');
+        modals.forEach(modal => {
+            // If modal is visible, close it
+            if (!modal.classList.contains('hidden')) {
+                toggleModal(modal.id);
             }
         });
+    }
+});
     </script>
 </body>
 </html>

@@ -194,7 +194,7 @@
         </li>
         @endif
 
-        <!-- Trash Section (Admin Only) -->
+        <!-- Trash Section (Admin Only) 
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
             <li>
                 <a 
@@ -213,6 +213,7 @@
                 </a>
             </li>
         @endif
+        -->
     </ul>
 </div>
 

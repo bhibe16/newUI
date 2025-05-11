@@ -124,6 +124,9 @@ public function document()
         'position' => $this->position ? $this->position->name : null,
     ];
 }
-
+public function emergencyContacts()
+{
+    return $this->hasMany(EmergencyContact::class);
+}
     
 }

@@ -76,6 +76,7 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => 'prefer',
+            'timezone' => '+08:00',
         ],
 
         'sqlsrv' => [
