@@ -124,6 +124,48 @@
             </ul>
         </li>
 
+        <!-- Payroll Dropdown -->
+         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'hr3')
+        <li id="payroll-dropdown-parent" class="dropdown-parent">
+            <button 
+                id="payroll-dropdown" 
+                class="block py-3 px-4 w-full text-left hover:bg-gray-50 rounded-lg mx-2 flex items-center justify-between transition-all duration-200 group"
+                onclick="toggleDropdown('payroll')"
+                aria-expanded="false"
+                aria-controls="document-submenu"
+            >
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 rounded-lg bg-gray-50 group-hover:bg-gray-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" viewBox="0 -960 960 960" class="fill-current text-gray-600">
+                            <path d="M560-440q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM280-320q-33 0-56.5-23.5T200-400v-320q0-33 23.5-56.5T280-800h560q33 0 56.5 23.5T920-720v320q0 33-23.5 56.5T840-320H280Zm80-80h400q0-33 23.5-56.5T840-480v-160q-33 0-56.5-23.5T760-720H360q0 33-23.5 56.5T280-640v160q33 0 56.5 23.5T360-400Zm440 240H120q-33 0-56.5-23.5T40-240v-440h80v440h680v80ZM280-400v-320 320Z"/>
+                        </svg>
+                    </div>
+                    <span class="text-gray-700 group-hover:text-gray-900 transition-colors">Payslip</span>
+                </div>
+                <svg 
+                    id="payroll-icon" 
+                    class="dropdown-icon w-4 h-4 transition-transform duration-300 transform rotate-0 text-gray-400 group-hover:text-gray-600" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                >
+                    <path 
+                        stroke-linecap="round" 
+                        stroke-linejoin="round" 
+                        stroke-width="2" 
+                        d="M9 18l6-6-6-6"
+                    />
+                </svg>
+            </button>
+            <ul id="payroll-submenu" class="submenu space-y-1 pl-14 hidden mt-1 transition-all duration-300 ease-in-out">
+                <li><a href="{{ route('payslips.index') }}" class="block py-2 px-4 hover:bg-gray-50 rounded-lg text-gray-600 hover:text-gray-900 transition-all duration-200 text-sm text-center" onclick="setActive(this)">Payslips</a></li>
+                <li><a href="{{ route('payslips.bonuses') }}" class="block py-2 px-4 hover:bg-gray-50 rounded-lg text-gray-600 hover:text-gray-900 transition-all duration-200 text-sm text-center" onclick="setActive(this)">Bonuses</a></li>
+                <li><a href="{{ route('payslips.deduction') }}" class="block py-2 px-4 hover:bg-gray-50 rounded-lg text-gray-600 hover:text-gray-900 transition-all duration-200 text-sm text-center" onclick="setActive(this)">Deductions</a></li>
+            </ul>
+        </li>
+        @endif
+
         <!-- Jobpost Dropdown -->
         <li id="jobpost-dropdown-parent" class="dropdown-parent">
             <button 
